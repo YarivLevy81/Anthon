@@ -4,6 +4,7 @@ import datetime
 import struct
 import threading
 
+
 def run_server(address):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -12,7 +13,8 @@ def run_server(address):
     while True:
         conn, addr = sock.accept()
         threading._start_new_thread(new_client,(conn,addr))
-    
+
+
 def new_client(conn, addr):
         time.sleep(1)
         
