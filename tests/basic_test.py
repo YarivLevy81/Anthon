@@ -1,1 +1,5 @@
-# basic_test.py
+import pytest
+
+
+def test_run():
+    assert True
