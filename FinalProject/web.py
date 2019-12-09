@@ -9,6 +9,7 @@ from http.server import *
 
 _data_dir = ""
 
+
 class RequestHandler(BaseHTTPRequestHandler):
     def _set_headers(self):
         self.send_response(200)
@@ -93,7 +94,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(self._html("POST!"))
 
 
-
 def run_webserver(address, data_dir):
     global _data_dir
     _data_dir = data_dir
@@ -101,6 +101,7 @@ def run_webserver(address, data_dir):
 
     print(f"Starting httpd server on {address[0]}:{address[1]}")
     httpd.serve_forever()
+
 
 def main(argv):
     if len(argv) != 3:
@@ -123,6 +124,7 @@ def main(argv):
     except Exception as error:
         print(f'ERROR: {error}')
         return 1
+
 
 if __name__ == '__main__':
     import sys
