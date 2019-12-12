@@ -1,6 +1,7 @@
 from datetime import datetime
 import struct
 
+
 class Thought:
 
     def __init__(self, user_id, timestamp, thought):

@@ -3,50 +3,52 @@ import time
 import datetime
 import struct
 import threading
+from utils.listener import Listener
 
 
 def run_server(address):
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    sock.bind((address[0], address[1]))
-    sock.listen()
+    listener = Listener(address[1], address[0])
+    listener.start()
+
     while True:
-        conn, addr = sock.accept()
-        threading._start_new_thread(new_client,(conn,addr))
+        conn = listener.accept()
+        threading._start_new_thread(new_client, (conn,))
 
 
-def new_client(conn, addr):
-        time.sleep(1)
-        
-        from_client = bytes()
-        while True:
-            data = conn.recv(1024)
-            if not data: break
-            from_client += data
+def new_client(conn):
+    time.sleep(1)
 
-        pk = from_client
-        pk = struct.unpack("<qqi{0}s".format(len(from_client) - 20), pk)
+    from_client = bytes()
+    while True:
+        data = conn.receive(1024)
+        if not data:
+            break
+        from_client += data
 
-        user_id      = pk[0]
-        timestamp    = pk[1]
-        thought_size = pk[2]
-        thought      = pk[3]
-        thought      = thought.decode()
-        
-        datetime_string = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+    pk = from_client
+    pk_tup = struct.unpack("<qqi", pk[:20])
 
-        log_string =  "["
-        log_string += datetime_string
-        log_string += "]"
-        log_string += " user "
-        log_string += str(user_id)
-        log_string += ": "
-        log_string += thought
+    user_id      = pk_tup[0]
+    timestamp    = pk_tup[1]
+    thought_size = pk_tup[2]
+    thought      = pk[20:]
+    thought      = thought.decode()
 
-        print(log_string)
-        
-        conn.close()
-    
+    datetime_string = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+
+    log_string = "["
+    log_string += datetime_string
+    log_string += "]"
+    log_string += " user "
+    log_string += str(user_id)
+    log_string += ": "
+    log_string += thought
+
+    print(log_string)
+
+    conn.close()
+
+
 def main(argv):
     if len(argv) != 2:
         print(f'USAGE: {argv[0]} <address>')
@@ -61,11 +63,11 @@ def main(argv):
         address[1] = int(address[1])
 
         run_server(address)
-        
-        print('done')
+
     except Exception as error:
         print(f'ERROR: {error}')
         return 1
+
 
 if __name__ == '__main__':
     import sys

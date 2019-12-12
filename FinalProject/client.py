@@ -2,15 +2,16 @@ import socket
 import time
 import datetime
 import struct
+from utils.connection import Connection
 
 
 def upload_thought(address, user_id, thought):
-    clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    clientsocket.connect((address[0], address[1]))
+    conn = Connection.connect(address[0], address[1])
 
-    packet = struct.pack("<qqi{0}s".format(len(thought)), user_id, int(time.time()), len(thought), thought.encode())
-    
-    clientsocket.sendall(packet)
+    packet = struct.pack("<qqi".format(len(thought)), user_id, int(time.time()), len(thought))
+    packet += thought.encode()
+
+    conn.send(packet)
 
 
 def main(argv):
@@ -31,8 +32,7 @@ def main(argv):
         user_id = int(user_id)
         
         upload_thought(address, user_id, thought)
-        
-        print('done')
+
     except Exception as error:
         print(f'ERROR: {error}')
         return 1

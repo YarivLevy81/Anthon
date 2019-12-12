@@ -28,7 +28,8 @@ class Connection:
     def receive(self, size):
         data_in = self.socket.recv(size)
         if len(data_in) != size:
-            raise socket.error(f'Expected to receive {size} bytes but got {len(data_in)}')
+            pass
+            #raise socket.error(f'Expected to receive {size} bytes but got {len(data_in)}')
         return data_in
 
     def close(self):
