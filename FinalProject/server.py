@@ -1,8 +1,9 @@
-import socket
 import time
 import datetime
 import struct
 import threading
+
+from utils.ip_port import formatted_address
 from utils.listener import Listener
 
 
@@ -55,12 +56,9 @@ def main(argv):
         return 1
     try:
         address = argv[1]
-        
-        address = address.split(":")
-        socket.inet_aton(address[0])
-        if (int(address[1]) < 0) or (int(address[1]) > 65535):
-            raise ValueError
-        address[1] = int(address[1])
+
+        # IP:Port manipulation
+        address = formatted_address(address)
 
         run_server(address)
 

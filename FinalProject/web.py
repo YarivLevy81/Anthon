@@ -1,13 +1,9 @@
 import socket
-import time
-import datetime
-import struct
-import threading
-import os
 import pathlib
 from http.server import *
+from utils.ip_port import formatted_address
 
-_data_dir = ""
+_data_dir: pathlib.Path
 
 
 class RequestHandler(BaseHTTPRequestHandler):
@@ -38,12 +34,11 @@ class RequestHandler(BaseHTTPRequestHandler):
 
     def user_html(self):
         splitted_path = self.path.split("/")
-        #print(splitted_path)
+
         if len(splitted_path) != 3:
             return "<html> <body> <p> Wrong path! </p> </body> </html>".encode("utf8")
         
         current_path = pathlib.Path(str(_data_dir) + "/" + splitted_path[2])
-        #print(current_path)
         
         if not current_path.is_dir():
             return "<html> <body> <p> Wrong path! </p> </body> </html>".encode("utf8")
@@ -66,6 +61,8 @@ class RequestHandler(BaseHTTPRequestHandler):
                             <td> {data} </td>
                         </tr>
                           '''
+
+        #TODO: refactor ugly code!
         thoughts_html = []
         for thought_file in current_path.iterdir():
             splitted_time    = thought_file.stem.split("_")
@@ -78,7 +75,7 @@ class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self._set_headers()
         to_write = ""
-        if (self.path == "/" or self.path == "/favicon.ico"):
+        if self.path == "/" or self.path == "/favicon.ico":
             to_write = self.main_html()
         else:
             to_write = self.user_html()
@@ -111,12 +108,8 @@ def main(argv):
         address  = argv[1]
         data_dir = pathlib.Path(argv[2])
 
-        #IP:Port manipulation
-        address = address.split(":")
-        socket.inet_aton(address[0])
-        if (int(address[1]) < 0) or (int(address[1]) > 65535):
-            raise ValueError
-        address[1] = int(address[1])
+        # IP:Port manipulation
+        address = formatted_address(address)
 
         run_webserver(address, data_dir)
         

@@ -1,8 +1,8 @@
 import socket
 import time
-import datetime
 import struct
 from utils.connection import Connection
+from utils.ip_port import formatted_address
 
 
 def upload_thought(address, user_id, thought):
@@ -22,12 +22,9 @@ def main(argv):
         address = argv[1]
         user_id = argv[2]
         thought = argv[3]
-    
-        address = address.split(":")
-        socket.inet_aton(address[0])
-        if (int(address[1]) < 0) and (int(address[1]) > 65535):
-            raise ValueError
-        address[1] = int(address[1])
+
+        # IP:Port manipulation
+        address = formatted_address(address)
         
         user_id = int(user_id)
         
