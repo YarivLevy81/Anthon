@@ -1,4 +1,4 @@
-from snapshot import Snapshot
+from protocol import Snapshot
 import struct
 from PIL import Image
 
@@ -6,6 +6,8 @@ SIZE_OF_DOUBLE = 8
 SIZE_OF_LONG = 8
 SIZE_OF_FLOAT = 4
 SIZE_OF_INT = 4
+
+# TODO: 1) Handle errors, 2) Handle stop iterations
 
 
 class Reader:
@@ -61,6 +63,8 @@ class Reader:
         color_image_width = int.from_bytes(self.f.read(SIZE_OF_INT), byteorder='little')
         color_image_in_bytes = self.f.read(color_image_height * color_image_width * 3)
         snapshot.color_image = Image.frombytes('RGB', (color_image_width, color_image_height), color_image_in_bytes, 'raw')
+        b, g, r = snapshot.color_image.split()
+        snapshot.color_image = Image.merge('RGB', (r, g, b))
 
         depth_image_height = int.from_bytes(self.f.read(SIZE_OF_INT), byteorder='little')
         depth_image_width = int.from_bytes(self.f.read(SIZE_OF_INT), byteorder='little')
