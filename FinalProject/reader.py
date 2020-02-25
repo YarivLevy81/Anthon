@@ -10,17 +10,22 @@ SIZE_OF_INT = 4
 # TODO: 1) Handle errors, 2) Handle stop iterations
 
 
-class Reader:
-
-    def __init__(self, path):
+class BaseReader:
+    def __init__(self, path, on_create=None):
         self.path = path
         self.f = open(path, 'rb')
+        if on_create is not None:
+            on_create()
+
+
+class SampleReader(BaseReader):
+
+    def __init__(self, path):
         self.user_id = -1
         self.username = ""
         self.birth_date = -1
         self.gender = ''
-
-        self.read_user_information()
+        super().__init__(path, self.read_user_information)
 
     def read_user_information(self):
         user_id_in_bytes = self.f.read(8)
