@@ -19,6 +19,9 @@ class BaseReader:
 
 
 class SampleReader(BaseReader):
+    """
+    :param user_id: id number of the user
+    """
 
     def __init__(self, path):
         self.user_id = -1

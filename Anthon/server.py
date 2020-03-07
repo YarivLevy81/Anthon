@@ -1,72 +1,39 @@
-import time
-import datetime
-import struct
-import threading
+import click
+from flask import Flask, jsonify, request
+from PIL import Image
+from anthon_pb2 import Message
 
-from utils.ip_port import formatted_address
-from utils.listener import Listener
-
-
-def run_server(address):
-    listener = Listener(address[1], address[0])
-    listener.start()
-
-    while True:
-        conn = listener.accept()
-        threading._start_new_thread(new_client, (conn,))
+app = Flask(__name__)
+_publish = None
 
 
-def new_client(conn):
-    time.sleep(1)
-
-    from_client = bytes()
-    while True:
-        data = conn.receive(1024)
-        if not data:
-            break
-        from_client += data
-
-    pk = from_client
-    pk_tup = struct.unpack("<qqi", pk[:20])
-
-    user_id      = pk_tup[0]
-    timestamp    = pk_tup[1]
-    thought_size = pk_tup[2]
-    thought      = pk[20:]
-    thought      = thought.decode()
-
-    datetime_string = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
-
-    log_string = "["
-    log_string += datetime_string
-    log_string += "]"
-    log_string += " user "
-    log_string += str(user_id)
-    log_string += ": "
-    log_string += thought
-
-    print(log_string)
-
-    conn.close()
+@click.group()
+def main():
+    pass
 
 
-def main(argv):
-    if len(argv) != 2:
-        print(f'USAGE: {argv[0]} <address>')
-        return 1
-    try:
-        address = argv[1]
+@main.command()
+@click.option("--host", "-h", default='127.0.0.1')
+@click.option("--port", "-p", default=8000)
+@click.argument('publish')
+def run_server(host, port, publish):
+    global _publish
+    _publish = publish
+    app.run(host=host, port=port)
 
-        # IP:Port manipulation
-        address = formatted_address(address)
+    print(f'host={host}, port={port}, publish={publish}')
 
-        run_server(address)
 
-    except Exception as error:
-        print(f'ERROR: {error}')
-        return 1
+@app.route('/msg', methods=['POST'])
+def new_message():
+    data = request.data
+    msg = Message()
+    msg.ParseFromString(data)
+    img = msg.snapshot.color_image
+    Image.frombytes('RGB', (img.width, img.height), img.data, 'raw').show()
+
+    return jsonify({'new_message': 1})
 
 
 if __name__ == '__main__':
-    import sys
-    sys.exit(main(sys.argv))
+    main()

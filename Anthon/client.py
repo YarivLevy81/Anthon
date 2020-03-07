@@ -1,40 +1,39 @@
-import socket
-import time
-import struct
-from utils.connection import Connection
-from utils.ip_port import formatted_address
+import click
+from snapshot_reader import SampleReader
+from anthon_pb2 import Message
+from PIL import Image
+import requests
 
 
-def upload_thought(address, user_id, thought):
-    conn = Connection.connect(address[0], address[1])
-
-    packet = struct.pack("<qqi".format(len(thought)), user_id, int(time.time()), len(thought))
-    packet += thought.encode()
-
-    conn.send(packet)
+@click.group()
+def main():
+    pass
 
 
-def main(argv):
-    if len(argv) != 4:
-        print(f'USAGE: {argv[0]} <address> <user_id> <thought>')
-        return 1
-    try:
-        address = argv[1]
-        user_id = argv[2]
-        thought = argv[3]
+@main.command()
+@click.option("--host", "-h", default='127.0.0.1')
+@click.option("--port", "-p", default=8000)
+@click.argument('path')
+def upload_sample(host, port, path):
+    rdr = SampleReader(path)
 
-        # IP:Port manipulation
-        address = formatted_address(address)
-        
-        user_id = int(user_id)
-        
-        upload_thought(address, user_id, thought)
+    print(f'host={host}, port={port}, path={path}')
 
-    except Exception as error:
-        print(f'ERROR: {error}')
-        return 1
+    print(rdr.user_id)
+    snp = next(rdr)
+    img = snp
+    msg = Message()
+    populate_message(msg, rdr, snp)
+    print(len(msg.SerializeToString()))
+    r = requests.post(f'http://{host}:{port}/msg', headers={'Content-Type': 'application/protobuf'}, data=msg.SerializeToString())
+    print(r.text)
+
+
+def populate_message(msg, reader, snapshot):
+    msg.user.CopyFrom(reader.user)
+    msg.snapshot.CopyFrom(snapshot)
+    msg.type = 0
 
 
 if __name__ == '__main__':
-    import sys
-    sys.exit(main(sys.argv))
+    main()
