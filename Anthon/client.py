@@ -1,6 +1,6 @@
 import click
 from snapshot_reader import SampleReader
-from anthon_pb2 import Message
+from anthon_pb2 import ServerMessage
 from PIL import Image
 import requests
 
@@ -22,7 +22,7 @@ def upload_sample(host, port, path):
     print(rdr.user_id)
     snp = next(rdr)
     img = snp
-    msg = Message()
+    msg = ServerMessage()
     populate_message(msg, rdr, snp)
     print(len(msg.SerializeToString()))
     r = requests.post(f'http://{host}:{port}/msg', headers={'Content-Type': 'application/protobuf'}, data=msg.SerializeToString())
