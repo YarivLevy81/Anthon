@@ -1,6 +1,6 @@
 import pika
 from furl import furl
-from enum import Enum
+from .common import UnsupportedSchemeException
 
 
 class MQHandler:
@@ -34,5 +34,4 @@ class MQHandler:
         self.channel.basic_publish(exchange='parser', routing_key='', body=message)
 
 
-class UnsupportedSchemeException(Exception):
-    pass
+

@@ -15,20 +15,25 @@ def main():
 @click.option("--port", "-p", default=8000)
 @click.argument('path')
 def upload_sample(host, port, path):
-    rdr = SampleReader(path)
-
     print(f'host={host}, port={port}, path={path}')
 
-    print(rdr.user_id)
-    snp = next(rdr)
-    img = snp
-    msg = ServerMessage()
-    populate_message(msg, rdr, snp)
-    print(len(msg.SerializeToString()))
-    r = requests.post(f'http://{host}:{port}/msg',
+    rdr = SampleReader(path)
+
+    # We first send the user
+    r = requests.post(f'http://{host}:{port}/user',
                       headers={'Content-Type': 'application/protobuf'},
-                      data=msg.SerializeToString())
-    print(r.text)
+                      data=rdr.user.SerializeToString())
+    # TODO: Check result and exit gracefully
+
+    print(f'user_id={rdr.user_id})')
+    for snapshot in rdr:
+
+        msg = ServerMessage()
+        populate_message(msg, rdr, snapshot)
+        r = requests.post(f'http://{host}:{port}/msg',
+                          headers={'Content-Type': 'application/protobuf'},
+                          data=msg.SerializeToString())
+        print(f'response={r.text}')
 
 
 def populate_message(msg, reader, snapshot):

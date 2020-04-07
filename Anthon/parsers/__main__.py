@@ -3,12 +3,11 @@ from .PoseParser import PoseParser
 from .FeelingsParser import FeelingsParser
 from .ColorImageParser import ColorImageParser
 from .DepthImageParser import DepthImageParser
-import uuid
-import time
 from . import Session
 import json
 import signal
 from Anthon.mq_handler import MQHandler
+import Anthon.common as Common
 
 
 @click.group()
@@ -20,12 +19,22 @@ def main():
 @click.argument('parser_type')
 @click.argument('path')
 def parse(parser_type, path):
-    parser = init_parser_type(parser_type)
-    unknown_user, datetime_now = uuid.uuid4().hex, int(time.time())
-    session = Session(unknown_user, datetime_now)
-
-    result = parser.parse(path, session)
     print(f'Parsing {parser_type}..')
+
+    parser = init_parser_type(parser_type)
+
+    file = open(path, 'rb')
+    data = file.read()
+    json_data = json.loads(data)
+
+    snapshot_path = json_data[Common.SNAPSHOT_PATH_FIELD]
+    user_id = json_data[Common.USER_ID_FIELD]
+    snapshot_id = json_data[Common.SNAPSHOT_ID_FIELD]
+    timestamp = json_data[Common.TIMESTAMP_FIELD]
+
+    session = Session(user_id=user_id, snapshot_id=snapshot_id)
+    result = parser.parse(path, session)
+
     return result
 
 
@@ -37,21 +46,25 @@ def run_parser(parser_type, publisher):
     parser = init_parser_type(parser_type)
 
     mq_handler = MQHandler(publisher)
-    mq_handler.init_queue(queue_name=parser_type, exchange_type='parser')
+    mq_handler.init_queue(queue_name=parser_type, exchange_type=Common.PARSERS_EXCHANGE_TYPE)
 
     def callback(ch, method, properties, body):
         message = json.loads(body)
-        user_id = message['user_id']
-        timestamp = message['timestamp']
-        snapshot_path = message['path']
+        user_id = message[Common.USER_ID_FIELD]
+        timestamp = message[Common.TIMESTAMP_FIELD]
+        snapshot_id = message[Common.SNAPSHOT_ID_FIELD]
+        snapshot_path = message[Common.SNAPSHOT_PATH_FIELD]
 
-        saver_message = parser.parse(snapshot_path, Session(user_id=user_id, timestamp=timestamp))
-        saver_message['user_id'] = user_id
-        saver_message['timestamp'] = timestamp
-        saver_message['type'] = parser_type
+        saver_message = parser.parse(snapshot_path, Session(user_id=user_id, snapshot_id=snapshot_id))
+        saver_message[Common.USER_ID_FIELD] = user_id
+        saver_message[Common.TIMESTAMP_FIELD] = timestamp
+        saver_message[Common.SNAPSHOT_ID_FIELD] = snapshot_id
+        saver_message[Common.TYPE_FIELD] = parser_type
+        saver_message[Common.SNAPSHOT_PATH_FIELD] = snapshot_path
 
         mq_handler.to_saver(message=saver_message)
 
+    # This line will block until SIGINT\SIGTERM\SIGKILL is received
     mq_handler.listen_to_queue(queue_name=parser_type, callback=callback)
 
     def signal_handler(sig, frame):
