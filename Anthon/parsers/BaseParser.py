@@ -1,6 +1,8 @@
-from anthon_pb2 import QueueMessage, Snapshot
+from Anthon.anthon_pb2 import QueueMessage, Snapshot
 from pathlib import Path
 import json
+from . import Session
+
 
 class BaseParser:
 
@@ -9,7 +11,7 @@ class BaseParser:
     def __init__(self):
         pass
 
-    def parse(self, path):
+    def parse(self, path, session: Session):
         raise NotImplementedError()
 
     def run_parser(self):
@@ -22,11 +24,11 @@ class BaseParser:
             snapshot = Snapshot()
             snapshot.ParseFromString(data)
         else:
-            raise Exception("No file " + path)
+            raise Exception("No such file " + path)
 
         return snapshot
 
-    def extract_message(self, path):
+    def message_callback(self, path):
         # Integrate with RabitMQ
 
         file = Path(path)

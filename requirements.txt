@@ -1,3 +1,7 @@
+pymongo
+furl
+matplotlib
+numpy
 alabaster==0.7.12
 attrs==19.3.0
 Babel==2.7.0
@@ -36,3 +40,4 @@ urllib3==1.25.7
 wcwidth==0.1.7
 Werkzeug==0.16.0
 Pillow==6.2.1
+pika==1.1.0

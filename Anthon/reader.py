@@ -74,10 +74,7 @@ class SampleReader(BaseReader):
         b, g, r = snapshot.color_image.split()
         snapshot.color_image = Image.merge('RGB', (r, g, b))
 
-        depth_image_height = int.from_bytes(self.f.read(SIZE_OF_INT), byteorder='little')
-        depth_image_width = int.from_bytes(self.f.read(SIZE_OF_INT), byteorder='little')
-        depth_image_in_bytes = self.f.read(depth_image_height * depth_image_width * SIZE_OF_FLOAT)
-        snapshot.depth_image = Image.frombytes('F', (depth_image_width, depth_image_height), depth_image_in_bytes, 'raw')
+
 
         feeling_unpacked = struct.unpack('ffff', self.f.read(4 * SIZE_OF_FLOAT))
         snapshot.feelings.hunger = feeling_unpacked[0]

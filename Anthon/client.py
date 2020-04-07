@@ -25,14 +25,15 @@ def upload_sample(host, port, path):
     msg = ServerMessage()
     populate_message(msg, rdr, snp)
     print(len(msg.SerializeToString()))
-    r = requests.post(f'http://{host}:{port}/msg', headers={'Content-Type': 'application/protobuf'}, data=msg.SerializeToString())
+    r = requests.post(f'http://{host}:{port}/msg',
+                      headers={'Content-Type': 'application/protobuf'},
+                      data=msg.SerializeToString())
     print(r.text)
 
 
 def populate_message(msg, reader, snapshot):
     msg.user.CopyFrom(reader.user)
     msg.snapshot.CopyFrom(snapshot)
-    msg.type = 0
 
 
 if __name__ == '__main__':

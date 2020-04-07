@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x0c\x61nthon.proto\",\n\x07Message\x12\x13\n\x04user\x18\x01 \x01(\x0b\x32\x05.User\x12\x0c\n\x04path\x18\x02 \x01(\t\"\x84\x01\n\x04User\x12\x0f\n\x07user_id\x18\x01 \x01(\x04\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x10\n\x08\x62irthday\x18\x03 \x01(\r\x12\x1c\n\x06gender\x18\x04 \x01(\x0e\x32\x0c.User.Gender\")\n\x06Gender\x12\x08\n\x04MALE\x10\x00\x12\n\n\x06\x46\x45MALE\x10\x01\x12\t\n\x05OTHER\x10\x02\"\x92\x01\n\x08Snapshot\x12\x10\n\x08\x64\x61tetime\x18\x01 \x01(\x04\x12\x13\n\x04pose\x18\x02 \x01(\x0b\x32\x05.Pose\x12 \n\x0b\x63olor_image\x18\x03 \x01(\x0b\x32\x0b.ColorImage\x12 \n\x0b\x64\x65pth_image\x18\x04 \x01(\x0b\x32\x0b.DepthImage\x12\x1b\n\x08\x66\x65\x65lings\x18\x05 \x01(\x0b\x32\t.Feelings\"\xb8\x01\n\x04Pose\x12&\n\x0btranslation\x18\x01 \x01(\x0b\x32\x11.Pose.Translation\x12 \n\x08rotation\x18\x02 \x01(\x0b\x32\x0e.Pose.Rotation\x1a.\n\x0bTranslation\x12\t\n\x01x\x18\x01 \x01(\x01\x12\t\n\x01y\x18\x02 \x01(\x01\x12\t\n\x01z\x18\x03 \x01(\x01\x1a\x36\n\x08Rotation\x12\t\n\x01x\x18\x01 \x01(\x01\x12\t\n\x01y\x18\x02 \x01(\x01\x12\t\n\x01z\x18\x03 \x01(\x01\x12\t\n\x01w\x18\x04 \x01(\x01\"9\n\nColorImage\x12\r\n\x05width\x18\x01 \x01(\r\x12\x0e\n\x06height\x18\x02 \x01(\r\x12\x0c\n\x04\x64\x61ta\x18\x03 \x01(\x0c\"9\n\nDepthImage\x12\r\n\x05width\x18\x01 \x01(\r\x12\x0e\n\x06height\x18\x02 \x01(\r\x12\x0c\n\x04\x64\x61ta\x18\x03 \x03(\x02\"Q\n\x08\x46\x65\x65lings\x12\x0e\n\x06hunger\x18\x01 \x01(\x02\x12\x0e\n\x06thirst\x18\x02 \x01(\x02\x12\x12\n\nexhaustion\x18\x03 \x01(\x02\x12\x11\n\thappiness\x18\x04 \x01(\x02\x62\x06proto3'
+  serialized_pb=b'\n\x0c\x61nthon.proto\"A\n\rServerMessage\x12\x13\n\x04user\x18\x01 \x01(\x0b\x32\x05.User\x12\x1b\n\x08snapshot\x18\x02 \x01(\x0b\x32\t.Snapshot\"1\n\x0cQueueMessage\x12\x13\n\x04user\x18\x01 \x01(\x0b\x32\x05.User\x12\x0c\n\x04path\x18\x02 \x01(\t\"\x84\x01\n\x04User\x12\x0f\n\x07user_id\x18\x01 \x01(\x04\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x10\n\x08\x62irthday\x18\x03 \x01(\r\x12\x1c\n\x06gender\x18\x04 \x01(\x0e\x32\x0c.User.Gender\")\n\x06Gender\x12\x08\n\x04MALE\x10\x00\x12\n\n\x06\x46\x45MALE\x10\x01\x12\t\n\x05OTHER\x10\x02\"\x92\x01\n\x08Snapshot\x12\x10\n\x08\x64\x61tetime\x18\x01 \x01(\x04\x12\x13\n\x04pose\x18\x02 \x01(\x0b\x32\x05.Pose\x12 \n\x0b\x63olor_image\x18\x03 \x01(\x0b\x32\x0b.ColorImage\x12 \n\x0b\x64\x65pth_image\x18\x04 \x01(\x0b\x32\x0b.DepthImage\x12\x1b\n\x08\x66\x65\x65lings\x18\x05 \x01(\x0b\x32\t.Feelings\"\xb8\x01\n\x04Pose\x12&\n\x0btranslation\x18\x01 \x01(\x0b\x32\x11.Pose.Translation\x12 \n\x08rotation\x18\x02 \x01(\x0b\x32\x0e.Pose.Rotation\x1a.\n\x0bTranslation\x12\t\n\x01x\x18\x01 \x01(\x01\x12\t\n\x01y\x18\x02 \x01(\x01\x12\t\n\x01z\x18\x03 \x01(\x01\x1a\x36\n\x08Rotation\x12\t\n\x01x\x18\x01 \x01(\x01\x12\t\n\x01y\x18\x02 \x01(\x01\x12\t\n\x01z\x18\x03 \x01(\x01\x12\t\n\x01w\x18\x04 \x01(\x01\"9\n\nColorImage\x12\r\n\x05width\x18\x01 \x01(\r\x12\x0e\n\x06height\x18\x02 \x01(\r\x12\x0c\n\x04\x64\x61ta\x18\x03 \x01(\x0c\"9\n\nDepthImage\x12\r\n\x05width\x18\x01 \x01(\r\x12\x0e\n\x06height\x18\x02 \x01(\r\x12\x0c\n\x04\x64\x61ta\x18\x03 \x03(\x02\"Q\n\x08\x46\x65\x65lings\x12\x0e\n\x06hunger\x18\x01 \x01(\x02\x12\x0e\n\x06thirst\x18\x02 \x01(\x02\x12\x12\n\nexhaustion\x18\x03 \x01(\x02\x12\x11\n\thappiness\x18\x04 \x01(\x02\x62\x06proto3'
 )
 
 
@@ -44,28 +44,66 @@ _USER_GENDER = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=154,
-  serialized_end=195,
+  serialized_start=226,
+  serialized_end=267,
 )
 _sym_db.RegisterEnumDescriptor(_USER_GENDER)
 
 
-_MESSAGE = _descriptor.Descriptor(
-  name='Message',
-  full_name='Message',
+_SERVERMESSAGE = _descriptor.Descriptor(
+  name='ServerMessage',
+  full_name='ServerMessage',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='user', full_name='Message.user', index=0,
+      name='user', full_name='ServerMessage.user', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='path', full_name='Message.path', index=1,
+      name='snapshot', full_name='ServerMessage.snapshot', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=16,
+  serialized_end=81,
+)
+
+
+_QUEUEMESSAGE = _descriptor.Descriptor(
+  name='QueueMessage',
+  full_name='QueueMessage',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='user', full_name='QueueMessage.user', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='path', full_name='QueueMessage.path', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -83,8 +121,8 @@ _MESSAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=16,
-  serialized_end=60,
+  serialized_start=83,
+  serialized_end=132,
 )
 
 
@@ -136,8 +174,8 @@ _USER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=63,
-  serialized_end=195,
+  serialized_start=135,
+  serialized_end=267,
 )
 
 
@@ -195,8 +233,8 @@ _SNAPSHOT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=198,
-  serialized_end=344,
+  serialized_start=270,
+  serialized_end=416,
 )
 
 
@@ -240,8 +278,8 @@ _POSE_TRANSLATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=429,
-  serialized_end=475,
+  serialized_start=501,
+  serialized_end=547,
 )
 
 _POSE_ROTATION = _descriptor.Descriptor(
@@ -291,8 +329,8 @@ _POSE_ROTATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=477,
-  serialized_end=531,
+  serialized_start=549,
+  serialized_end=603,
 )
 
 _POSE = _descriptor.Descriptor(
@@ -328,8 +366,8 @@ _POSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=347,
-  serialized_end=531,
+  serialized_start=419,
+  serialized_end=603,
 )
 
 
@@ -373,8 +411,8 @@ _COLORIMAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=533,
-  serialized_end=590,
+  serialized_start=605,
+  serialized_end=662,
 )
 
 
@@ -418,8 +456,8 @@ _DEPTHIMAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=592,
-  serialized_end=649,
+  serialized_start=664,
+  serialized_end=721,
 )
 
 
@@ -470,11 +508,13 @@ _FEELINGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=651,
-  serialized_end=732,
+  serialized_start=723,
+  serialized_end=804,
 )
 
-_MESSAGE.fields_by_name['user'].message_type = _USER
+_SERVERMESSAGE.fields_by_name['user'].message_type = _USER
+_SERVERMESSAGE.fields_by_name['snapshot'].message_type = _SNAPSHOT
+_QUEUEMESSAGE.fields_by_name['user'].message_type = _USER
 _USER.fields_by_name['gender'].enum_type = _USER_GENDER
 _USER_GENDER.containing_type = _USER
 _SNAPSHOT.fields_by_name['pose'].message_type = _POSE
@@ -485,7 +525,8 @@ _POSE_TRANSLATION.containing_type = _POSE
 _POSE_ROTATION.containing_type = _POSE
 _POSE.fields_by_name['translation'].message_type = _POSE_TRANSLATION
 _POSE.fields_by_name['rotation'].message_type = _POSE_ROTATION
-DESCRIPTOR.message_types_by_name['Message'] = _MESSAGE
+DESCRIPTOR.message_types_by_name['ServerMessage'] = _SERVERMESSAGE
+DESCRIPTOR.message_types_by_name['QueueMessage'] = _QUEUEMESSAGE
 DESCRIPTOR.message_types_by_name['User'] = _USER
 DESCRIPTOR.message_types_by_name['Snapshot'] = _SNAPSHOT
 DESCRIPTOR.message_types_by_name['Pose'] = _POSE
@@ -494,12 +535,19 @@ DESCRIPTOR.message_types_by_name['DepthImage'] = _DEPTHIMAGE
 DESCRIPTOR.message_types_by_name['Feelings'] = _FEELINGS
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-Message = _reflection.GeneratedProtocolMessageType('Message', (_message.Message,), {
-  'DESCRIPTOR' : _MESSAGE,
+ServerMessage = _reflection.GeneratedProtocolMessageType('ServerMessage', (_message.Message,), {
+  'DESCRIPTOR' : _SERVERMESSAGE,
   '__module__' : 'anthon_pb2'
-  # @@protoc_insertion_point(class_scope:Message)
+  # @@protoc_insertion_point(class_scope:ServerMessage)
   })
-_sym_db.RegisterMessage(Message)
+_sym_db.RegisterMessage(ServerMessage)
+
+QueueMessage = _reflection.GeneratedProtocolMessageType('QueueMessage', (_message.Message,), {
+  'DESCRIPTOR' : _QUEUEMESSAGE,
+  '__module__' : 'anthon_pb2'
+  # @@protoc_insertion_point(class_scope:QueueMessage)
+  })
+_sym_db.RegisterMessage(QueueMessage)
 
 User = _reflection.GeneratedProtocolMessageType('User', (_message.Message,), {
   'DESCRIPTOR' : _USER,
