@@ -28,11 +28,11 @@ class SampleReader(BaseReader):
         self.byteorder = byteorder
         #TODO: Handle exception here
 
-        self.user = None
-        self.user_id = -1
-        self.username = ""
+        self.user       = None
+        self.user_id    = -1
+        self.username   = ""
         self.birth_date = -1
-        self.gender = ''
+        self.gender     = ''
 
         super().__init__(path, self.read_user_information)
 
@@ -42,11 +42,11 @@ class SampleReader(BaseReader):
 
         user_data_bytes = self.file.read(user_msg_size)
         user = User.FromString(user_data_bytes)
-        self.user = user
-        self.user_id = user.user_id
-        self.username = user.username
+        self.user       = user
+        self.user_id    = user.user_id
+        self.username   = user.username
         self.birth_date = user.birthday
-        self.gender = user.gender
+        self.gender     = user.gender
 
     def __iter__(self):
         return self

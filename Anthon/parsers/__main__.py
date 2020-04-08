@@ -6,7 +6,7 @@ from .DepthImageParser import DepthImageParser
 from . import Session
 import json
 import signal
-from Anthon.mq_handler import MQHandler
+import Anthon.mq_handler as MQHandler
 import Anthon.common as Common
 
 
@@ -28,12 +28,12 @@ def parse(parser_type, path):
     json_data = json.loads(data)
 
     snapshot_path = json_data[Common.SNAPSHOT_PATH_FIELD]
-    user_id = json_data[Common.USER_ID_FIELD]
-    snapshot_id = json_data[Common.SNAPSHOT_ID_FIELD]
-    timestamp = json_data[Common.TIMESTAMP_FIELD]
+    user_id       = json_data[Common.USER_ID_FIELD]
+    snapshot_id   = json_data[Common.SNAPSHOT_ID_FIELD]
+    # timestamp     = json_data[Common.TIMESTAMP_FIELD]
 
     session = Session(user_id=user_id, snapshot_id=snapshot_id)
-    result = parser.parse(path, session)
+    result = parser.parse(snapshot_path, session)
 
     return result
 
@@ -45,22 +45,17 @@ def run_parser(parser_type, publisher):
     print(f'Running {parser_type} parser..')
     parser = init_parser_type(parser_type)
 
-    mq_handler = MQHandler(publisher)
-    mq_handler.init_queue(queue_name=parser_type, exchange_type=Common.PARSERS_EXCHANGE_TYPE)
+    mq_handler = MQHandler.MQHandler(publisher)
+    mq_handler.init_queue(queue_name=parser_type, exchange_type=MQHandler.PARSERS_EXCHANGE_TYPE)
 
     def callback(ch, method, properties, body):
         message = json.loads(body)
-        user_id = message[Common.USER_ID_FIELD]
-        timestamp = message[Common.TIMESTAMP_FIELD]
-        snapshot_id = message[Common.SNAPSHOT_ID_FIELD]
+        user_id       = message[Common.USER_ID_FIELD]
+        snapshot_id   = message[Common.SNAPSHOT_ID_FIELD]
         snapshot_path = message[Common.SNAPSHOT_PATH_FIELD]
 
         saver_message = parser.parse(snapshot_path, Session(user_id=user_id, snapshot_id=snapshot_id))
-        saver_message[Common.USER_ID_FIELD] = user_id
-        saver_message[Common.TIMESTAMP_FIELD] = timestamp
-        saver_message[Common.SNAPSHOT_ID_FIELD] = snapshot_id
-        saver_message[Common.TYPE_FIELD] = parser_type
-        saver_message[Common.SNAPSHOT_PATH_FIELD] = snapshot_path
+        saver_message.update(message)
 
         mq_handler.to_saver(message=saver_message)
 

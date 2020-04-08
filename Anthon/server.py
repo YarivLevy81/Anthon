@@ -35,16 +35,16 @@ def new_user():
     data = request.data
     user = User.FromString(data)
 
-    user_id = user.user_id
-    username = user.username
+    user_id   = user.user_id
+    username  = user.username
     birthdate = user.birthdate
-    gender = user.gender
+    gender    = user.gender
 
     data = {
-        Common.USER_ID_FIELD: user_id,
-        Common.USERNAME_FIELD: username,
+        Common.USER_ID_FIELD:   user_id,
+        Common.USERNAME_FIELD:  username,
         Common.BIRTHDATE_FIELD: birthdate,
-        Common.GENDER_FIELD: gender,
+        Common.GENDER_FIELD:    gender,
     }
 
     user_message = {Common.TYPE_FIELD: Common.USER_TYPE, Common.DATA_FIELD: data}
@@ -57,19 +57,25 @@ def new_message():
     msg = ServerMessage()
     msg.ParseFromString(data)
 
-    user_data = msg.user
-    user_id = user_data.user_id
+    user_data     = msg.user
+    user_id       = user_data.user_id
+    username      = user_data.username
+    birthdate     = user_data.birthdate
+    gender        = user_data.gender
     snapshot_data = msg.snapshot
-    timestamp = msg.snapshot.timestamp
+    timestamp     = msg.snapshot.timestamp
 
     snapshot_id = uuid4().hex
     snapshot_path = save_snapshot_to_disk(snapshot_data, snapshot_id)
 
     message_dict = {
+        Common.USER_ID_FIELD:       user_id,
+        Common.USERNAME_FIELD:      username,
+        Common.BIRTHDATE_FIELD:     birthdate,
+        Common.GENDER_FIELD:        gender,
+        Common.SNAPSHOT_ID_FIELD:   snapshot_id,
         Common.SNAPSHOT_PATH_FIELD: snapshot_path,
-        Common.USER_ID_FIELD: user_id,
-        Common.SNAPSHOT_ID_FIELD: snapshot_id,
-        Common.TIMESTAMP_FIELD: timestamp,
+        Common.TIMESTAMP_FIELD:     timestamp,
     }
 
     publish_message(message=json.dumps(message_dict))

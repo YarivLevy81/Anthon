@@ -2,6 +2,7 @@ from Anthon.parsers.BaseParser import BaseParser
 from PIL import Image
 from . import Session
 import json
+import Anthon.common as Common
 
 
 class ColorImageParser(BaseParser):
@@ -18,12 +19,12 @@ class ColorImageParser(BaseParser):
         image.save(image_path, "PNG")
 
         json_data = {
-            'height': snapshot.color_image.height,
-            'width':  snapshot.color_image.width,
-            'path':   image_path
+            'height':       snapshot.color_image.height,
+            'width':        snapshot.color_image.width,
+            'image_path':   image_path
         }
 
-        return json.dumps({"data": json_data})
+        return json.dumps({Common.RESULT_DATA_FIELD: json_data})
 
     def __init__(self):
         super().__init__()

@@ -1,6 +1,7 @@
 from Anthon.parsers.BaseParser import BaseParser
 import json
 from . import Session
+import Anthon.common as Common
 
 
 class PoseParser(BaseParser):
@@ -20,7 +21,7 @@ class PoseParser(BaseParser):
             'rotation_w': snapshot.rotation.w,
         }
 
-        return json.dumps({"data": pose_json})
+        return json.dumps({Common.RESULT_DATA_FIELD: pose_json})
 
     def __init__(self):
         super().__init__()

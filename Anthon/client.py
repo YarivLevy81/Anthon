@@ -24,8 +24,9 @@ def upload_sample(host, port, path):
                       headers={'Content-Type': 'application/protobuf'},
                       data=rdr.user.SerializeToString())
     # TODO: Check result and exit gracefully
-
     print(f'user_id={rdr.user_id})')
+
+    # We will now iterate the reader, and send every snapshot to the server
     for snapshot in rdr:
 
         msg = ServerMessage()

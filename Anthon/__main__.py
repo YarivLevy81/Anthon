@@ -11,7 +11,7 @@ def print_available_commands(commands):
 
 if __name__ == '__main__':
     args = sys.argv
-    usage = "python -m FinalProject [COMMAND] [ARGS]"
+    usage = "python -m Anthon [COMMAND] [ARGS]"
     available_commands = {"run_server": server, "upload_thought": client, "run_webserver": web}
 
     if len(args) < 2:
