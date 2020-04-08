@@ -10,9 +10,10 @@ MONGO_DEFAULT_PATH = "mongodb://localhost:27017"
 
 class MongoHandler:
 
-    def __init__(self, path=MONGO_DEFAULT_PATH):
-        self.path = path
-        self.client = pymongo.MongoClient(self.path)
+    def __init__(self, host, port):
+        self.host = host
+        self.port = port
+        self.client = pymongo.MongoClient(host=self.host, port=self.port)
 
         self.db            = self.client[BASE_DB]
         self.users_doc     = self.db[USERS_DOCUMENT]
@@ -29,6 +30,7 @@ class MongoHandler:
 
     def save_snapshot_result(self, result_entry: ResultEntry):
         if not self.snapshot_id_exists(result_entry.snapshot_id):
+            print("not exists")
             self.snapshots_doc.insert_one(result_entry.to_json())
             return
 

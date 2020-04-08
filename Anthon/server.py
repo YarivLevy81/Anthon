@@ -60,10 +60,10 @@ def new_message():
     user_data     = msg.user
     user_id       = user_data.user_id
     username      = user_data.username
-    birthdate     = user_data.birthdate
+    birthdate     = user_data.birthday
     gender        = user_data.gender
     snapshot_data = msg.snapshot
-    timestamp     = msg.snapshot.timestamp
+    timestamp     = msg.snapshot.datetime
 
     snapshot_id = uuid4().hex
     snapshot_path = save_snapshot_to_disk(snapshot_data, snapshot_id)
@@ -77,6 +77,7 @@ def new_message():
         Common.SNAPSHOT_PATH_FIELD: snapshot_path,
         Common.TIMESTAMP_FIELD:     timestamp,
     }
+    _save_message_to_disk(message_dict)
 
     publish_message(message=json.dumps(message_dict))
     return jsonify(message_dict)
@@ -101,10 +102,17 @@ def publish_user(message):
 
 
 def save_snapshot_to_disk(snapshot_data, snapshot_id):
-    file = Path(SNAPSHOTS_DIRECTORY) / snapshot_id + ".raw"
-    file.write_bytes(snapshot_data)
+    # TODO: make sure that directory exists
+    file = Path(SNAPSHOTS_DIRECTORY) / (snapshot_id  + ".snp")
+    file.write_bytes(snapshot_data.SerializeToString())
 
-    return file.absolute()
+    return str(file.absolute())
+
+
+# For debugging only
+def _save_message_to_disk(message_data):
+    file = Path(SNAPSHOTS_DIRECTORY) / (message_data['snapshot_id'] + ".raw")
+    file.write_text(json.dumps(message_data))
 
 
 if __name__ == '__main__':

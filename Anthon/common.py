@@ -7,6 +7,7 @@ USERNAME_FIELD = 'username'
 BIRTHDATE_FIELD = 'birthdate'
 GENDER_FIELD = 'gender'
 RESULT_DATA_FIELD = 'result_data'
+DATA_FIELD = 'data'
 
 USER_TYPE = 'user'
 

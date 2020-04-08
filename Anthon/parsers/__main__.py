@@ -19,7 +19,7 @@ def main():
 @click.argument('parser_type')
 @click.argument('path')
 def parse(parser_type, path):
-    print(f'Parsing {parser_type}..')
+    #print(f'Parsing {parser_type}..')
 
     parser = init_parser_type(parser_type)
 
@@ -30,12 +30,13 @@ def parse(parser_type, path):
     snapshot_path = json_data[Common.SNAPSHOT_PATH_FIELD]
     user_id       = json_data[Common.USER_ID_FIELD]
     snapshot_id   = json_data[Common.SNAPSHOT_ID_FIELD]
-    # timestamp     = json_data[Common.TIMESTAMP_FIELD]
 
     session = Session(user_id=user_id, snapshot_id=snapshot_id)
     result = parser.parse(snapshot_path, session)
+    result.update(json_data)
 
-    return result
+    print(json.dumps(result))
+    return json.dumps(result)
 
 
 @main.command()
@@ -56,6 +57,7 @@ def run_parser(parser_type, publisher):
 
         saver_message = parser.parse(snapshot_path, Session(user_id=user_id, snapshot_id=snapshot_id))
         saver_message.update(message)
+        saver_message = json.dumps(saver_message)
 
         mq_handler.to_saver(message=saver_message)
 

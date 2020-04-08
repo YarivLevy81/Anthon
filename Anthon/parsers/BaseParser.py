@@ -23,6 +23,7 @@ class BaseParser:
             data = file.read_bytes()
             snapshot = Snapshot()
             snapshot.ParseFromString(data)
+            #print("Returning snapshot..")
         else:
             raise Exception("No such file " + path)
 

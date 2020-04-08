@@ -21,6 +21,7 @@ class MQHandler:
         self.params = pika.ConnectionParameters(host=url.host, port=url.port)
         self.connection = pika.BlockingConnection(self.params)
         self.channel = self.connection.channel()
+        self.channel.exchange_declare(exchange=PARSERS_EXCHANGE_TYPE, exchange_type='fanout')
 
     def init_queue(self, queue_name, exchange_type):
         # Init of parser's queue
@@ -37,7 +38,7 @@ class MQHandler:
         self.channel.start_consuming()
 
     def to_parsers(self, message):
-        self.channel.exchange_declare(exchange=PARSERS_EXCHANGE_TYPE, exchange_type='fanout')
+        #self.channel.exchange_declare(exchange=PARSERS_EXCHANGE_TYPE, exchange_type='fanout')
         self.channel.basic_publish(exchange=PARSERS_EXCHANGE_TYPE, routing_key=PARSERS_ROUTING_KEY, body=message)
 
 

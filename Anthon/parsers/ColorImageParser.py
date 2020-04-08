@@ -24,7 +24,7 @@ class ColorImageParser(BaseParser):
             'image_path':   image_path
         }
 
-        return json.dumps({Common.RESULT_DATA_FIELD: json_data})
+        return {self.parser_type: json_data}
 
     def __init__(self):
         super().__init__()

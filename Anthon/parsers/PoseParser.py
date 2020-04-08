@@ -15,13 +15,13 @@ class PoseParser(BaseParser):
             'translation_y': snapshot.pose.translation.y,
             'translation_z': snapshot.pose.translation.z,
 
-            'rotation_x': snapshot.rotation.x,
-            'rotation_y': snapshot.rotation.y,
-            'rotation_z': snapshot.rotation.z,
-            'rotation_w': snapshot.rotation.w,
+            'rotation_x': snapshot.pose.rotation.x,
+            'rotation_y': snapshot.pose.rotation.y,
+            'rotation_z': snapshot.pose.rotation.z,
+            'rotation_w': snapshot.pose.rotation.w,
         }
 
-        return json.dumps({Common.RESULT_DATA_FIELD: pose_json})
+        return {self.parser_type: pose_json}
 
     def __init__(self):
         super().__init__()

@@ -20,9 +20,9 @@ def upload_sample(host, port, path):
     rdr = SampleReader(path)
 
     # We first send the user
-    r = requests.post(f'http://{host}:{port}/user',
-                      headers={'Content-Type': 'application/protobuf'},
-                      data=rdr.user.SerializeToString())
+    #r = requests.post(f'http://{host}:{port}/user',
+    #                  headers={'Content-Type': 'application/protobuf'},
+    #                  data=rdr.user.SerializeToString())
     # TODO: Check result and exit gracefully
     print(f'user_id={rdr.user_id})')
 
@@ -35,6 +35,7 @@ def upload_sample(host, port, path):
                           headers={'Content-Type': 'application/protobuf'},
                           data=msg.SerializeToString())
         print(f'response={r.text}')
+        break
 
 
 def populate_message(msg, reader, snapshot):

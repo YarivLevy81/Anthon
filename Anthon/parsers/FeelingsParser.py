@@ -17,7 +17,7 @@ class FeelingsParser(BaseParser):
             'happiness':  snapshot.feelings.happiness,
         }
 
-        return json.dumps({Common.RESULT_DATA_FIELD: feelings_json})
+        return {self.parser_type: feelings_json}
 
     def __init__(self):
         super().__init__()
