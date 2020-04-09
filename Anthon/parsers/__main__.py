@@ -47,7 +47,7 @@ def run_parser(parser_type, publisher):
     parser = init_parser_type(parser_type)
 
     mq_handler = MQHandler.MQHandler(publisher)
-    mq_handler.init_queue(queue_name=parser_type, exchange_type=MQHandler.PARSERS_EXCHANGE_TYPE)
+    mq_handler.init_parser_queue(queue_name=parser_type, exchange_type=MQHandler.PARSERS_EXCHANGE_TYPE)
 
     def callback(ch, method, properties, body):
         message = json.loads(body)
@@ -57,6 +57,7 @@ def run_parser(parser_type, publisher):
 
         saver_message = parser.parse(snapshot_path, Session(user_id=user_id, snapshot_id=snapshot_id))
         saver_message.update(message)
+        saver_message[Common.TYPE_FIELD] = parser_type
         saver_message = json.dumps(saver_message)
 
         mq_handler.to_saver(message=saver_message)

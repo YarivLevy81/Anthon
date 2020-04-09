@@ -6,7 +6,7 @@ import Anthon.common as Common
 
 class FeelingsParser(BaseParser):
 
-    parser_type = "feeling"
+    parser_type = "feelings"
 
     def parse(self, path, session: Session):
         snapshot = self.get_snapshot_data(path)
