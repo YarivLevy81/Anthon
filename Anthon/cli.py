@@ -1,69 +1,82 @@
-from inspect import getfullargspec
-from functools import wraps
-import sys
-import re
+import requests
+import click
+import pathlib
 
 
-class CommandLineInterface:
+HTTP_SCHEME = "http"
 
-    functions = {}
 
-    def command(self, f):
-        if f.__name__ not in self.functions:
-            self.functions[f.__name__] = f
+@click.group()
+def main():
+    pass
 
-        @wraps(f)
-        def wrapper(*args, **kwargs):
-            return f(*args, **kwargs)
 
-        return wrapper
+@main.command("get-users")
+@click.option("--host", "-h", default='127.0.0.1')
+@click.option("--port", "-p", default=5000)
+def get_users(host, port):
+    request_url = f'{HTTP_SCHEME}://{host}:{port}/users'
+    r = requests.get(url=request_url)
 
-    def main(self):
-        command = ""
-        key_val = ""
+    print(r.json())
+    return r.json()
 
-        command = '|'.join(repr(func_name) for func_name, func in self.functions.items())
-        usage_message = f'USAGE: python {sys.argv[0]} {command} {key_val}'
 
-        if len(sys.argv) <= 2:
-            print(usage_message)
-            exit(1)
+@main.command("get-user")
+@click.option("--host", "-h", default='127.0.0.1')
+@click.option("--port", "-p", default=5000)
+@click.argument("user_id")
+def get_user(host, port, user_id):
+    request_url = f'{HTTP_SCHEME}://{host}:{port}/users/{user_id}'
+    r = requests.get(url=request_url)
 
-        func = sys.argv[1]
-        if func not in self.functions:
-            print(usage_message)
-            exit(1)
-            
-        args = sys.argv[2:]
-        func_fullargspec = getfullargspec(self.functions[func])
-        func_args        = func_fullargspec.args
-        exp_arg_count    = len(func_args)
+    print(r.json())
+    return r.json()
 
-        key_val = " ".join(f'{arg}=value' for arg in args)
-        command = func
-        usage_message = f'USAGE: python {sys.argv[0]} {command} {key_val}'
 
-        if exp_arg_count != len(args):
-            print(usage_message)
-            exit(1)
+@main.command("get-snapshots")
+@click.option("--host", "-h", default='127.0.0.1')
+@click.option("--port", "-p", default=5000)
+@click.argument("user_id")
+def get_snapshots(host, port, user_id):
+    request_url = f'{HTTP_SCHEME}://{host}:{port}/users/{user_id}/snapshots'
+    r = requests.get(url=request_url)
 
-        arg_dict = {}
-        for arg in args:
-            if not re.match("[a-zA-z_]{1}[a-zA-z0-9_]*=[a-zA-z0-9_]+", arg):
-                print(usage_message)
-                exit(1)
-            parsed_arg = arg.split('=')
-            arg_name   = parsed_arg[0]
-            arg_value  = parsed_arg[1]
-            
-            arg_dict[arg_name] = arg_value
+    print(r.json())
+    return r.json()
 
-            if arg_name not in func_args: 
-                print(usage_message)
-                exit(1)
 
-        self.functions[func](**arg_dict)
-        exit(0)
-                
-        
+@main.command("get-snapshot")
+@click.option("--host", "-h", default='127.0.0.1')
+@click.option("--port", "-p", default=5000)
+@click.argument("user_id")
+@click.argument("snapshot_id")
+def get_snapshot(host, port, user_id, snapshot_id):
+    request_url = f'{HTTP_SCHEME}://{host}:{port}/users/{user_id}/snapshots/{snapshot_id}'
+    r = requests.get(url=request_url)
 
+    print(r.json())
+    return r.json()
+
+
+@main.command("get-result")
+@click.option("--host", "-h", default='127.0.0.1')
+@click.option("--port", "-p", default=5000)
+@click.argument("user_id")
+@click.argument("snapshot_id")
+@click.argument("topic")
+@click.option('--save', '-s')
+def get_result(host, port, user_id, snapshot_id, topic, save):
+    request_url = f'{HTTP_SCHEME}://{host}:{port}/users/{user_id}/snapshots/{snapshot_id}/{topic}'
+    r = requests.get(url=request_url)
+
+    if save:
+        path = pathlib.Path(save)
+        path.write_text(r.text)
+
+    print(r.json())
+    return r.json()
+
+
+if __name__ == '__main__':
+    main()
