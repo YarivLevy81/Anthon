@@ -19,8 +19,6 @@ def main():
 @click.argument('parser_type')
 @click.argument('path')
 def parse(parser_type, path):
-    #print(f'Parsing {parser_type}..')
-
     parser = init_parser_type(parser_type)
 
     file = open(path, 'rb')
@@ -39,9 +37,13 @@ def parse(parser_type, path):
     return json.dumps(result)
 
 
-@main.command()
+@main.command('run-parser')
 @click.argument('parser_type')
 @click.argument('publisher')
+def run_parser_cli(parser_type, publisher):
+    run_parser(parser_type=parser_type, publisher=publisher)
+
+
 def run_parser(parser_type, publisher):
     print(f'Running {parser_type} parser..')
     parser = init_parser_type(parser_type)
@@ -51,8 +53,8 @@ def run_parser(parser_type, publisher):
 
     def callback(ch, method, properties, body):
         message = json.loads(body)
-        user_id       = message[Common.USER_ID_FIELD]
-        snapshot_id   = message[Common.SNAPSHOT_ID_FIELD]
+        user_id = message[Common.USER_ID_FIELD]
+        snapshot_id = message[Common.SNAPSHOT_ID_FIELD]
         snapshot_path = message[Common.SNAPSHOT_PATH_FIELD]
 
         saver_message = parser.parse(snapshot_path, Session(user_id=user_id, snapshot_id=snapshot_id))

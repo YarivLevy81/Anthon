@@ -25,7 +25,7 @@ def run_saver(database, publisher):
     def callback(ch, method, properties, body):
         json_message = json.loads(body)
         parser_type = json_message[Common.TYPE_FIELD]
-        save_one(db_handler=mongo_handler, json_message=json_message, topic=parser_type)
+        save_snapshot(db_handler=mongo_handler, json_message=json_message, topic=parser_type)
 
     mq_handler.listen_to_saver_queue(callback=callback)
 
@@ -50,10 +50,10 @@ def save(database, topic, path):
     if topic not in json_message:
         raise Warning("Result type of the data doesn't seem to match topic")
 
-    save_one(db_handler=mongo_handler, json_message=json_message, topic=topic)
+    save_snapshot(db_handler=mongo_handler, json_message=json_message, topic=topic)
 
 
-def save_one(db_handler, json_message, topic):
+def save_snapshot(db_handler, json_message, topic):
     user_id = json_message[Common.USER_ID_FIELD]
     username = json_message[Common.USERNAME_FIELD]
     birthdate = json_message[Common.BIRTHDATE_FIELD]

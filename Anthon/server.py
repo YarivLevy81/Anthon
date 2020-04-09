@@ -18,10 +18,14 @@ def main():
     pass
 
 
-@main.command()
+@main.command('run-server')
 @click.option("--host", "-h", default='127.0.0.1')
 @click.option("--port", "-p", default=8000)
 @click.argument('publish')
+def run_server_cli(host, port, publish):
+    run_server(host=host, port=port, publish=publish)
+
+
 def run_server(host, port, publish):
     global _publish
     _publish = publish

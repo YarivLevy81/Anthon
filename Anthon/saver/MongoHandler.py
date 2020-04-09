@@ -78,8 +78,8 @@ class MongoHandler(DBHandler):
 
         return snapshots_json_list
 
-    def get_snapshot(self, snapshot_id):
-        snapshot_doc = self.snapshots_col.find({Common.SNAPSHOT_ID_FIELD: snapshot_id})
+    def get_snapshot(self, user_id, snapshot_id):
+        snapshot_doc = self.snapshots_col.find_one({Common.SNAPSHOT_ID_FIELD: snapshot_id, Common.USER_ID_FIELD: user_id})
         if snapshot_doc is not None:
             snapshot_doc.pop('_id')
             snapshot_doc.pop(Common.SNAPSHOT_PATH_FIELD)
@@ -87,8 +87,8 @@ class MongoHandler(DBHandler):
 
         return snapshot_doc
 
-    def get_snapshot_result(self, snapshot_id, topic):
-        snapshot_doc = self.get_snapshot(snapshot_id)
+    def get_snapshot_result(self, user_id, snapshot_id, topic):
+        snapshot_doc = self.get_snapshot(user_id, snapshot_id)
         if snapshot_doc is not None:
             if topic in snapshot_doc:
                 return snapshot_doc[topic]
