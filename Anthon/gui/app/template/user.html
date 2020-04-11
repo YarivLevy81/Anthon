@@ -35,32 +35,26 @@
   <section class="jumbotron text-center">
     <div class="container">
       <h1 class="jumbotron-heading">Anthon</h1>
-      <p class="lead text-muted">Users page</p>
-      <form method="POST">
-      <div class="input-group mb-3">
-        <input type="text" name="query" class="form-control">
-      </div>
-      <p>
-        <!--- <button type="submit" name="submit" value="search" class="btn btn-primary my-2">YouTube Search</button> --->
-        <!--- <button type="submit" name="submit" value="lucky" class="btn btn-secondary my-2">I'm Feeling Lucky</button> --->
-      </p>
-      </form>
+      <p class="lead text-muted">User {{ user.user_id }}</p>
+      <p class="lead text-muted">{{ user.username }}</p>
+      <p class="lead text-muted">Birthdate: {{ user.birthdate }}</p>
+      <p class="lead text-muted">Gender: {{ user.gender }}</p>
     </div>
   </section>
 
   <div class="album py-5 bg-light">
     <div class="container">
       <div class="row">
-        {% for user in users %}
+        {% for snapshot in snapshots %}
         <div class="col-md-4">
           <div class="card mb-4 shadow-sm">
             <div class="card-body">
-              <p class="card-text">{{ user.username }}</p>
+              <p class="card-text">{{ snapshot.snapshot_id }}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <a type="button" href="{{ user.url }}" class="btn btn-sm btn-outline-secondary">Show user</a>
+                  <a type="button" href="{{ snapshot.snapshot_path }}" class="btn btn-sm btn-outline-secondary">Show snapshot</a>
                 </div>
-                <small class="text-muted">user id {{ user.user_id }}</small>
+                <small class="text-muted">time: {{ snapshot.time }}</small>
               </div>
             </div>
           </div>

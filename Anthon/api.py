@@ -22,7 +22,7 @@ def run_server(host, port, database):
     run_api_server(host=host, port=port, database=database)
 
 
-def run_api_server(host, port, database):
+def run_api_server(host, port, database="mongodb://1270.0.0.1:27017"):
     global _database
     print(f'Running API: host={host}, port={port}, database={database}')
     _database = MongoHandler(database)
@@ -99,7 +99,7 @@ def get_user_snapshot_result_data(user_id, snapshot_id, result_name):
     result_json = base_user_snapshot_result(user_id=user_id, snapshot_id=snapshot_id, result_name=result_name)
     if Common.IMAGE_PATH_FIELD in result_json:
         image_path = result_json[Common.IMAGE_PATH_FIELD]
-        return send_file(image_path, mimetype='image/gif')
+        return send_file(image_path, mimetype='image/png')
 
     else:
         result_json = {}
