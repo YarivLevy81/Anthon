@@ -1,0 +1,131 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq
+    networks:
+      - my_network
+    ports:
+      - "5672:5672"
+  mongodb:
+    image: mongo
+    networks:
+      - my_network
+    ports:
+      - "27017:27017"
+  server:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anthon.server run-server -h '0.0.0.0' -p 8000 'rabbitmq://rabbitmq:5672'
+    ports:
+    - "8000:8000"
+    links:
+      - "rabbitmq"
+    depends_on:
+      - "rabbitmq"
+    networks:
+      - my_network
+    volumes:
+      - ./data:/data
+      - ./snapshots:/snapshots
+  pose:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anthon.parsers run-parser 'pose' 'rabbitmq://rabbitmq:5672/'
+    links:
+      - "rabbitmq"
+    depends_on:
+      - "rabbitmq"
+    networks:
+      - my_network
+    volumes:
+      - ./users_data:/users_data
+      - ./snapshots:/snapshots
+  feelings:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anthon.parsers run-parser 'feelings' 'rabbitmq://rabbitmq:5672/'
+    links:
+      - "rabbitmq"
+    depends_on:
+      - "rabbitmq"
+    networks:
+      - my_network
+    volumes:
+      - ./users_data:/users_data
+      - ./snapshots:/snapshots
+  color_image:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anthon.parsers run-parser 'color_image' 'rabbitmq://rabbitmq:5672/'
+    links:
+      - "rabbitmq"
+    depends_on:
+      - "rabbitmq"
+    networks:
+      - my_network
+    volumes:
+      - ./users_data:/users_data
+      - ./snapshots:/snapshots
+  depth_image:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anthon.parsers run-parser 'depth_image' 'rabbitmq://rabbitmq:5672/'
+    links:
+      - "rabbitmq"
+    depends_on:
+      - "rabbitmq"
+    networks:
+      - my_network
+    volumes:
+      - ./users_data:/users_data
+      - ./snapshots:/snapshots
+  saver:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anthon.saver run-saver 'mongodb://mongodb:27017' 'rabbitmq://rabbitmq:5672'
+    links:
+      - "rabbitmq"
+      - "mongodb"
+    networks:
+      - my_network
+    volumes:
+      - ./data:/data
+  api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anthon.api run-server -h '0.0.0.0' -p 5000 -d 'mongodb://mongodb:27017'
+    ports:
+      - "5000:5000"
+    networks:
+      - my_network
+    links:
+      - "mongodb"
+    volumes:
+      - ./data:/data
+      - ./users_data:/users_data
+      - ./snapshots:/snapshots
+  gui:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anthon.gui run-server -h '0.0.0.0' -p 8080 -H 'api' -P 5000
+    ports:
+      - "8080:8080"
+    networks:
+      - my_network
+    links:
+      - "rabbitmq"
+    volumes:
+      - ./data:/data
+      - ./users_data:/users_data
+      - ./snapshots:/snapshots
+networks:
+  my_network:
+    driver: bridge

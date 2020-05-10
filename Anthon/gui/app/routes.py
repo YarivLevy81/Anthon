@@ -1,6 +1,6 @@
 import requests
 from datetime import datetime
-from flask import Blueprint, render_template, current_app, request, redirect
+from flask import Blueprint, render_template, current_app, request, Flask
 
 GUI_HOST = ""
 GUI_PORT = ""
@@ -10,6 +10,9 @@ API_PORT = ""
 main = Blueprint('main', __name__)
 GUI_URL = f'http://{GUI_HOST}:{GUI_PORT}'
 API_URL = f'http://{API_HOST}:{API_PORT}'
+EXT_API_URL = f'http://{API_HOST}:{API_PORT}'
+
+app = Flask(__name__)
 
 
 @main.route('/', methods=['GET'])
@@ -39,7 +42,7 @@ def user_page(user_id):
     just_before()
 
     snapshots = []
-    
+
     user_url = f'{API_URL}/users/{user_id}'
     r = requests.get(user_url)
     user_result = r.json()
@@ -101,7 +104,7 @@ def snapshot_page(user_id, snapshot_id):
 
     if 'pose' in result:
         pose = True
-        urls['pose'] = f'{API_URL}/users/{user_id}/snapshots/{snapshot_id}/pose'
+        urls['pose'] = f'{EXT_API_URL}/users/{user_id}/snapshots/{snapshot_id}/pose'
         pose_data = result['pose']
         pose_data_formatted = {}
         for k, v in pose_data.items():
@@ -109,7 +112,7 @@ def snapshot_page(user_id, snapshot_id):
 
     if 'feelings' in result:
         feelings = True
-        urls['feelings'] = f'{API_URL}/users/{user_id}/snapshots/{snapshot_id}/feelings'
+        urls['feelings'] = f'{EXT_API_URL}/users/{user_id}/snapshots/{snapshot_id}/feelings'
         feelings_data = result['feelings']
         feelings_data_formatted = {}
         for k, v in feelings_data.items():
@@ -117,19 +120,20 @@ def snapshot_page(user_id, snapshot_id):
 
     if 'color_image' in result:
         color_image = True
-        urls['color_image'] = f'{API_URL}/users/{user_id}/snapshots/{snapshot_id}/color_image/data'
+        urls['color_image'] = f'{EXT_API_URL}/users/{user_id}/snapshots/{snapshot_id}/color_image/data'
 
     if 'depth_image' in result:
         depth_image = True
-        urls['depth_image'] = f'{API_URL}/users/{user_id}/snapshots/{snapshot_id}/depth_image/data'
+        urls['depth_image'] = f'{EXT_API_URL}/users/{user_id}/snapshots/{snapshot_id}/depth_image/data'
 
     return render_template('snapshot.html', pose=pose, feelings=feelings,
                            depth_image=depth_image, color_image=color_image, urls=urls,
-                           user=user, snapshot=snapshot, pose_data=pose_data_formatted, feelings_data=feelings_data_formatted)
+                           user=user, snapshot=snapshot, pose_data=pose_data_formatted,
+                           feelings_data=feelings_data_formatted)
 
 
 def just_before():
-    global GUI_HOST, GUI_PORT, API_HOST, API_PORT, GUI_URL, API_URL
+    global GUI_HOST, GUI_PORT, API_HOST, API_PORT, GUI_URL, API_URL, EXT_API_URL
 
     GUI_HOST = current_app.config['host']
     GUI_PORT = current_app.config['port']
@@ -137,3 +141,5 @@ def just_before():
     API_PORT = current_app.config['api_port']
     GUI_URL = f'http://{GUI_HOST}:{GUI_PORT}'
     API_URL = f'http://{API_HOST}:{API_PORT}'
+    EXT_API_URL = f'http://0.0.0.0:{API_PORT}' if API_HOST == 'api' else API_URL
+

@@ -22,9 +22,9 @@ def run_server(host, port, database):
     run_api_server(host=host, port=port, database=database)
 
 
-def run_api_server(host, port, database="mongodb://1270.0.0.1:27017"):
+def run_api_server(host, port, database):
     global _database
-    print(f'Running API: host={host}, port={port}, database={database}')
+    #print(f'Running API: host={host}, port={port}, database={database}')
     _database = MongoHandler(database)
     app.run(host=host, port=port)
 

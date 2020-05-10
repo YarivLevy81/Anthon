@@ -7,3 +7,6 @@ venv/
 __pycache__/
 *.result
 Anthon/gui/flask/
+snapshots/
+users_data/
+data/
