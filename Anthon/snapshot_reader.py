@@ -52,12 +52,14 @@ class SampleReader(BaseReader):
         return self
 
     def __next__(self):
-        return self.next_snapshot()
-
-    def next_snapshot(self):
         msg_size_bytes = self.file.read(MSG_SIZE)
+        if not msg_size_bytes:
+            raise StopIteration
         msg_size = int.from_bytes(msg_size_bytes, byteorder=self.byteorder)
 
         msg_bytes = self.file.read(msg_size)
+        if not msg_bytes:
+            raise StopIteration
         snapshot = Snapshot.FromString(msg_bytes)
+
         return snapshot

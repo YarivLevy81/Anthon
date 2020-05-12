@@ -10,19 +10,20 @@ def main():
     pass
 
 
-@main.command()
+@main.command('upload-sample')
 @click.option("--host", "-h", default='127.0.0.1')
 @click.option("--port", "-p", default=8000)
 @click.argument('path')
+def upload_sample_cli(host, port, path):
+    upload_sample(host=host, port=port, path=path)
+
+
 def upload_sample(host, port, path):
     print(f'host={host}, port={port}, path={path}')
 
     rdr = SampleReader(path)
 
     # We first send the user
-    #r = requests.post(f'http://{host}:{port}/user',
-    #                  headers={'Content-Type': 'application/protobuf'},
-    #                  data=rdr.user.SerializeToString())
     # TODO: Check result and exit gracefully
     print(f'user_id={rdr.user_id})')
 
@@ -35,7 +36,6 @@ def upload_sample(host, port, path):
                           headers={'Content-Type': 'application/protobuf'},
                           data=msg.SerializeToString())
         print(f'response={r.text}')
-        break
 
 
 def populate_message(msg, reader, snapshot):
