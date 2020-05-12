@@ -1,7 +1,7 @@
 from Anthon.anthon_pb2 import QueueMessage, Snapshot
 from pathlib import Path
 import json
-from . import Session
+from Anthon.parsers import Session
 
 
 class BaseParser:
@@ -23,7 +23,6 @@ class BaseParser:
             data = file.read_bytes()
             snapshot = Snapshot()
             snapshot.ParseFromString(data)
-            #print("Returning snapshot..")
         else:
             raise Exception("No such file " + path)
 

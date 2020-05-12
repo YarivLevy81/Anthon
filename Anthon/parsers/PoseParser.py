@@ -1,7 +1,5 @@
 from Anthon.parsers.BaseParser import BaseParser
-import json
-from . import Session
-import Anthon.common as Common
+from Anthon.parsers import Session
 
 
 class PoseParser(BaseParser):

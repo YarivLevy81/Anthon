@@ -1,9 +1,9 @@
 import click
-from .PoseParser import PoseParser
-from .FeelingsParser import FeelingsParser
-from .ColorImageParser import ColorImageParser
-from .DepthImageParser import DepthImageParser
-from . import Session
+from Anthon.parsers.PoseParser import PoseParser
+from Anthon.parsers.FeelingsParser import FeelingsParser
+from Anthon.parsers.ColorImageParser import ColorImageParser
+from Anthon.parsers.DepthImageParser import DepthImageParser
+from Anthon.parsers import Session
 import json
 import signal
 import Anthon.mq_handler as MQHandler
@@ -15,9 +15,13 @@ def main():
     pass
 
 
-@main.command()
+@main.command('parse')
 @click.argument('parser_type')
 @click.argument('path')
+def parse_cli(parser_type, path):
+    return parse(parser_type=parser_type, path=path)
+
+
 def parse(parser_type, path):
     parser = init_parser_type(parser_type)
 

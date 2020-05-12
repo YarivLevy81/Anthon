@@ -1,9 +1,7 @@
 from Anthon.parsers.BaseParser import BaseParser
-from . import Session
+from Anthon.parsers import Session
 import matplotlib.pyplot as plt
 import numpy as np
-import json
-import Anthon.common as Common
 
 
 class DepthImageParser(BaseParser):

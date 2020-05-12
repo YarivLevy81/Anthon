@@ -1,8 +1,6 @@
 from Anthon.parsers.BaseParser import BaseParser
 from PIL import Image
-from . import Session
-import json
-import Anthon.common as Common
+from Anthon.parsers import Session
 
 
 class ColorImageParser(BaseParser):
