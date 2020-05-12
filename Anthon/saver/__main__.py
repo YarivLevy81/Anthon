@@ -30,10 +30,14 @@ def run_saver(database, publisher):
     mq_handler.listen_to_saver_queue(callback=callback)
 
 
-@main.command()
+@main.command('save')
 @click.option("--database", "-d", default=MONGO_DEFAULT_PATH)
 @click.argument('topic')
 @click.argument('path')
+def save_cli(database, topic, path):
+    save(database=database, topic=topic, path=path)
+
+
 def save(database, topic, path):
     print(database)
     # TODO: Handle exceptions
