@@ -1,7 +1,7 @@
 import pathlib
 
 
-USERS_DATA_DIRECTORY = "/users_data"
+USERS_DATA_DIRECTORY = "./users_data"
 
 
 class Session:

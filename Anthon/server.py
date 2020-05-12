@@ -10,7 +10,7 @@ import Anthon.common as Common
 
 app = Flask(__name__)
 _publish = None
-SNAPSHOTS_DIRECTORY = "/snapshots"
+SNAPSHOTS_DIRECTORY = "./snapshots"
 
 
 @click.group()

@@ -30,7 +30,10 @@ def test_color_image_parser():
 
     assert result['height'] == 1080, err_msg.format('height')
     assert result['width'] == 1920, err_msg.format('width')
-    assert result['image_path'] == '/users_data/42/mock/color_image.png', err_msg.format('image_path')
+
+    from pathlib import Path
+    expected_path = str(Path().cwd().absolute()) + "/users_data/42/mock/color_image.png"
+    assert result['image_path'] == expected_path, err_msg.format('image_path')
 
 
 def test_depth_image_parser():
@@ -43,7 +46,10 @@ def test_depth_image_parser():
 
     assert result['height'] == 1080, err_msg.format('height')
     assert result['width'] == 1920, err_msg.format('width')
-    assert result['image_path'] == '/users_data/42/mock/depth_image.png', err_msg.format('image_path')
+
+    from pathlib import Path
+    expected_path = str(Path().cwd().absolute()) + "/users_data/42/mock/depth_image.png"
+    assert result['image_path'] == expected_path, err_msg.format('image_path')
 
 
 def test_feelings_parser():
