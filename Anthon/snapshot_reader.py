@@ -1,6 +1,4 @@
-from anthon_pb2 import User, Snapshot
-import struct
-from PIL import Image
+from Anthon.anthon_pb2 import User, Snapshot
 import gzip
 
 SIZE_OF_DOUBLE = 8
@@ -26,7 +24,6 @@ class SampleReader(BaseReader):
         self.path = path
         self.file = gzip.open(self.path)
         self.byteorder = byteorder
-        #TODO: Handle exception here
 
         self.user       = None
         self.user_id    = -1
@@ -63,3 +60,4 @@ class SampleReader(BaseReader):
         snapshot = Snapshot.FromString(msg_bytes)
 
         return snapshot
+

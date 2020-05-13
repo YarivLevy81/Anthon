@@ -1,8 +1,14 @@
+from Anthon.snapshot_reader import SampleReader
+from Anthon.anthon_pb2 import ServerMessage
 import click
-from snapshot_reader import SampleReader
-from anthon_pb2 import ServerMessage
-from PIL import Image
 import requests
+import pathlib
+from Anthon.common import bcolors
+
+
+ERRNO_FILE_NOT_EXIST = -2
+ERRNO_FILE_NOT_GZIP = -3
+ERRNO_SERVER_UNAVAILABLE = -4
 
 
 @click.group()
@@ -19,28 +25,44 @@ def upload_sample_cli(host, port, path):
 
 
 def upload_sample(host, port, path):
-    print(f'host={host}, port={port}, path={path}')
+    print(f'Uploading sample - host={host}, port={port}, path={path}')
+
+    if not pathlib.Path(path).exists():
+        print(f'{bcolors.FAIL}ERROR: No such file {path} {bcolors.ENDC}')
+        exit(ERRNO_FILE_NOT_EXIST)
+
+    if not is_gz_file(path):
+        print(f'{bcolors.FAIL}ERROR: File {path} is not .gz formatted {bcolors.ENDC}')
+        exit(ERRNO_FILE_NOT_GZIP)
 
     rdr = SampleReader(path)
-
-    # We first send the user
-    # TODO: Check result and exit gracefully
-    print(f'user_id={rdr.user_id})')
 
     # We will now iterate the reader, and send every snapshot to the server
     for snapshot in rdr:
 
         msg = ServerMessage()
         populate_message(msg, rdr, snapshot)
-        r = requests.post(f'http://{host}:{port}/msg',
-                          headers={'Content-Type': 'application/protobuf'},
-                          data=msg.SerializeToString())
-        print(f'response={r.text}')
+        try:
+            r = requests.post(f'http://{host}:{port}/msg',
+                              headers={'Content-Type': 'application/protobuf'},
+                              data=msg.SerializeToString())
+
+        except requests.exceptions.RequestException as e:
+            print(f'{bcolors.FAIL}ERROR: Connectivity problem with {host}:{port}\nStackTrace -\n{e}{bcolors.ENDC}')
 
 
 def populate_message(msg, reader, snapshot):
     msg.user.CopyFrom(reader.user)
     msg.snapshot.CopyFrom(snapshot)
+
+
+def is_gz_file(path):
+    import binascii
+
+    def _is_gz_file():
+        with open(path, 'rb') as test_f:
+            return binascii.hexlify(test_f.read(2)) == b'1f8b'
+    return _is_gz_file()
 
 
 if __name__ == '__main__':
