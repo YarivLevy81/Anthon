@@ -95,7 +95,26 @@
     >>> save(database=database, topic=topic, path=path)
     >>> run_saver(database=database, publisher=publisher) # Currently only MongoDB (database), RabbitMQ (publisher) are supported
 .result files are similar to mentioned above. 
-    
+
+5. **API** - run Anton's RESTFUL-API.
+    ```python
+    >>> from Anton.api import run_server
+    >>> run_server(host='127.0.0.1', port=5000, database="mongodb://127.0.0.1:27017")
+    ... # Only MongoDB is currently supported
+    ```
+
+6. **GUI** - run Anton's GUI.
+    ```python
+    >>> from Anton.gui import run_server
+    >>> run_server(
+    ...     host='127.0.0.1',
+    ...     port=8080,
+    ...     api_host='127.0.0.1'.
+    ...     api_port=5000
+    ...)
+    ```
+The GUI assumes a running API server (see section 5) in api_host:api_port.
+
 ## Testing
 
 You can run all unittests with the following command:
