@@ -121,19 +121,24 @@ The following are supported -
 ```python
     $ python -m Anton.cli get-users
     … # JSON Array with users is returned
-    …
+    … [{"user_id": 1, "username": "Barak Obama"}]
+    
     $ python -m Anton.cli get-user 1
     … # The parameter is the user_id 
-    …
+    … {"user_id": 1, "username": "Barak Obama", "birthdate": 12345678, "gender": 0}
+    
     $ python -m Anton.cli get-snapshots 1
     … # JSON Array with snapshots are returned (empty if no users inserted), The parameter is the user_id
-    …
+    … [{"snapshot_id": "6162e82630e1454d92f65b105ad75042", "timestamp": 1575446887339}, {"snapshot_id": "b7d510d93ce74b6e94a06a3e84c9926c", "timestamp": 1575446887412}, {"snapshot_id": "abd32178bd8343db869ab1386319bb8e", "timestamp": 1575446887476}]
+    
     $ python -m Anton.cli get-snapshot 1 2
     … # The parameters are user_id and snapshot_id
-    …
+    … {"snapshot_id": "6162e82630e1454d92f65b105ad75042", "timestamp": 1575446887339, "pose": {"translation_x": 0.4873843491077423, "translation_y": 0.007090016733855009, ... }}
+    
     $ python -m Anton.cli get-result 1 2 'pose'
     … # The parameters are user_id, snapshot_id an parser_type
-    …
+    … {"translation_x": 0.4873843491077423, "translation_y": 0.007090016733855009, "translation_z": -1.1306129693984985, "rotation_x": -0.10888676356214629, "rotation_y": -0.26755994585035286, "rotation_z": -0.021271118915446748, "rotation_w": 0.9571326384559261}
+    
 ```
 For each of the commands, an empty JSON Object/Array will be returned on failure.
 
