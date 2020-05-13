@@ -22,31 +22,31 @@
 
 ## APIs
 
-1. Client - upload sample to the server (assumes .mind file type)
+1. **Client** - upload sample to the server (assumes .mind file type)
     ```python
     >>> from Anthon.client import upload_sample
     >>> upload_sample(host='127.0.0.1', port=8000, path='sample.mind.gzip')
     ...
     ```
-2. Server - run server that forwards snapshots to other components,
+2. **Server** - run server that forwards snapshots to other components,
    publish can also be a function
      ```python
     >>> from Anthon.server import run_server
-    >>> run_server(host='127.0.0.1', port=8000, publish="rabbitmq://127.0.0.1:5672") # publish to rabbbit
+    >>> run_server(host='127.0.0.1', port=8000, publish="rabbitmq://127.0.0.1:5672") # publish to RabbitMQ
     >>> run_server(host='127.0.0.1', port=8000, publish=print) # print the message
     ...
     ```
-3. Parsers - run parser of some type, publishing result if needed
+3. **Parsers** - run parser of some type, publishing result if needed
     ```python
     >>> from Anthon.parsers import run_parser
     >>> from Anthon.parsers import parse
     >>> ...
-    >>> parser_type = ...
-    >>> data_path = ...
-    >>> publisher = ...
+    >>> parser_type = 'pose'
+    >>> data_path = '/snapshots/2da3a844a5f640ce816cd8464e6d77d8.raw'
+    >>> publisher = 'rabbitmq://127.0.0.1:5672'
     >>> ...
     >>> parse(parser_type=parser_type, path=data_path)
-    >>> run_praser(parser_type=parser_type, publisher=publisher) # Currently only 'rabbitmq' publisher is supported
+    >>> run_praser(parser_type=parser_type, publisher=publisher) # Currently only RabbitMQ publisher is supported
     ```
     parser_type is one of ['pose', 'color_image', 'depth_image', 'feelings'], data_path is a path to a file of the following format - 
     ```json
@@ -82,7 +82,20 @@
     }
 
     ```
-
+4. **Saver** - run saver (currently only MongoDB supported), integrated with RabbitMQ
+    ```python
+    >>> from Anthon.saver import run_saver
+    >>> from Anthon.saver import saver
+    >>> ...
+    >>> database = 'mongodb://127.0.0.1:27017'
+    >>> topic = 'pose'
+    >>> path = '/data/pose.result'
+    >>> publisher = 'rabbitmq://127.0.0.1:5672'
+    >>> ...
+    >>> save(database=database, topic=topic, path=path)
+    >>> run_saver(database=database, publisher=publisher) # Currently only MongoDB (database), RabbitMQ (publisher) are supported
+.result files are similar to mentioned above. 
+    
 ## Testing
 
 You can run all unittests with the following command:
