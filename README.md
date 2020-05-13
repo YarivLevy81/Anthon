@@ -147,7 +147,7 @@ The following are supported -
 
 **`GET /users`**
 
-    curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users
+    $ curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users
 
     HTTP/1.0 200 OK
     Content-Type: application/json
@@ -159,7 +159,7 @@ The following are supported -
 
 **`GET /users/<user_id>`**
 
-    curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420
+    $ curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420
 
     HTTP/1.0 200 OK
     Content-Type: application/json
@@ -171,7 +171,7 @@ The following are supported -
 
 **`GET /users/<user_id>/snapshots`**
 
-    curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420/snapshots
+    $ curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420/snapshots
 
     HTTP/1.0 200 OK
     Content-Type: application/json
@@ -183,7 +183,7 @@ The following are supported -
     
 **`GET /users/<user_id>/snapshots/<user_id>`**
 
-    curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420/snapshots/6162e82630e1454d92f65b105ad75042
+    $ curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420/snapshots/6162e82630e1454d92f65b105ad75042
 
     HTTP/1.0 200 OK
     Content-Type: application/json
@@ -195,7 +195,7 @@ The following are supported -
 
 **`GET /users/<user_id>/snapshots/<user_id>/<result_id>`**
 
-    curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420/snapshots/6162e82630e1454d92f65b105ad75042/pose
+    $ curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420/snapshots/6162e82630e1454d92f65b105ad75042/pose
     
     HTTP/1.0 200 OK
     Content-Type: application/json
