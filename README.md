@@ -142,8 +142,6 @@ The following are supported -
 ```
 For each of the commands, an empty JSON Object/Array will be returned on failure.
 
-~~ JSON examples ~~
-
 ## REST-API
 
 Default API host:port is '127.0.0.1':5000.
