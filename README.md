@@ -145,6 +145,18 @@ Default API host:port is '127.0.0.1':5000.
 
 The following are supported - 
 
+**`GET /users`**
+
+    curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users
+
+    HTTP/1.0 200 OK
+    Content-Type: application/json
+    Content-Length: 43
+    Server: Werkzeug/0.16.0 Python/3.8.2
+    Date: Wed, 13 May 2020 14:57:09 GMT
+
+    [{"user_id": 420666777420, "username": "Yariv Levy"}]
+
 **`GET /users/<user_id>`**
 
     curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420
