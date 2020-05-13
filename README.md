@@ -22,13 +22,13 @@
 
 ## APIs
 
-1. client - upload sample to the server (assumes .mind file type)
+1. Client - upload sample to the server (assumes .mind file type)
     ```python
     >>> from Anthon.client import upload_sample
     >>> upload_sample(host='127.0.0.1', port=8000, path='sample.mind.gzip')
     ...
     ```
-2. server - run server that forwards snapshots to other components,
+2. Server - run server that forwards snapshots to other components,
    publish can also be a function
      ```python
     >>> from Anthon.server import run_server
@@ -36,10 +36,24 @@
     >>> run_server(host='127.0.0.1', port=8000, publish=print) # print the message
     ...
     ```
+3. Parsers - run parser of some type, publishing result if needed
+    ```python
+    >>> from Anthon.parsers import run_parser
+    >>> from Anthon.parsers import parse
+    >>> ...
+    >>> parser_type = ...
+    >>> data_path = ..
+    >>> ...
+    >>> run_praser(parser_type=parser_type, path=data_path)
+    ```
+    parser_type is one of ['pose', 'color_image', 'depth_image', 'feelings'], data_path is a path to a file of the following format - 
+    ```json
+    xaxa = {}
+    ```
 
 ## Testing
 
 You can run all unittests with the following command:
 ```sh
-pytest tests/
+$ pytest tests/
 ```
