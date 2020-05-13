@@ -20,7 +20,7 @@
     [Anton] $
     ```
 
-## APIs
+## Interfaces
 
 1. **Client** - upload sample to the server (assumes .mind file type)
     ```python
@@ -114,6 +114,35 @@
     ...)
     ```
 The GUI assumes a running API server (see section 5) in api_host:api_port.
+
+## CLI
+
+The following are supported - 
+```python
+    $ python -m Anton.cli get-users
+    … # JSON Array with users is returned
+    …
+    $ python -m Anton.cli get-user 1
+    … # The parameter is the user_id 
+    …
+    $ python -m Anton.cli get-snapshots 1
+    … # JSON Array with snapshots are returned (empty if no users inserted), The parameter is the user_id
+    …
+    $ python -m Anton.cli get-snapshot 1 2
+    … # The parameters are user_id and snapshot_id
+    …
+    $ python -m Anton.cli get-result 1 2 'pose'
+    … # The parameters are user_id, snapshot_id an parser_type
+    …
+```
+For each of the commands, an empty JSON Object/Array will be returned on failure.
+
+~~ JSON examples ~~
+
+## REST-API
+
+The following are supported - 
+
 
 ## Testing
 
