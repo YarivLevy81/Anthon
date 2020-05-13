@@ -1,51 +1,64 @@
 import sys
 import os
+from Anthon.mq_handler import MQHandler
+from Anthon.saver.MongoHandler import MongoHandler, ResultEntry, UserEntry
+import json
+import Anthon.common as Common
 sys.path.append(os.path.join(os.path.dirname(__file__)))
 
 
-class DBHandler:
+def save(database, topic, path):
+    print(database)
+    # TODO: Handle exceptions
+    mongo_handler = MongoHandler(path=database)
+    print(type(path))
 
-    def __init__(self):
-        pass
+    json_message = None
+    if type(path) == str:
+        file = open(path, 'rb')
+        json_message = json.loads(file.read())
+    elif type(path) == dict:
+        json_message = path
 
+    if topic not in json_message:
+        raise Warning("Result type of the data doesn't seem to match topic")
 
-class ResultEntry:
-
-    def __init__(self, user_id, snapshot_id, snapshot_path, timestamp, result_type, result_data):
-        self.user_id       = user_id
-        self.snapshot_id   = snapshot_id
-        self.snapshot_path = snapshot_path
-        self.timestamp     = timestamp
-        self.result_type   = result_type
-        self.result_data   = result_data
-
-    def to_json(self):
-        result_dict = dict(
-            user_id       = self.user_id,
-            snapshot_id   = self.snapshot_id,
-            snapshot_path = self.snapshot_path,
-            timestamp     = self.timestamp,
-        )
-        result_dict[self.result_type] = self.result_data
-        return result_dict
-
-    def result_to_json(self):
-        return {self.result_type: self.result_data}
+    save_snapshot(db_handler=mongo_handler, json_message=json_message, topic=topic)
 
 
-class UserEntry:
+def save_snapshot(db_handler, json_message, topic):
+    user_id = json_message[Common.USER_ID_FIELD]
+    username = json_message[Common.USERNAME_FIELD]
+    birthdate = json_message[Common.BIRTHDATE_FIELD]
+    gender = json_message[Common.GENDER_FIELD]
 
-    def __init__(self, user_id, username, birthdate, gender):
-        self.user_id    = user_id
-        self.username   = username
-        self.birthdate  = birthdate
-        self.gender     = gender
+    data = json_message[topic]
+    timestamp = json_message[Common.TIMESTAMP_FIELD]
+    snapshot_id = json_message[Common.SNAPSHOT_ID_FIELD]
+    snapshot_path = json_message[Common.SNAPSHOT_PATH_FIELD]
 
-    def to_json(self):
-        result_dict = dict(
-            user_id   = self.user_id,
-            username  = self.username,
-            birthdate = self.birthdate,
-            gender    = self.gender,
-        )
-        return result_dict
+    user_entry = UserEntry(user_id=user_id, username=username, birthdate=birthdate, gender=gender)
+    result_entry = ResultEntry(user_id=user_id, snapshot_id=snapshot_id, snapshot_path=snapshot_path,
+                               timestamp=timestamp, result_type=topic, result_data=data)
+
+    db_handler.save_user(user_entry=user_entry)
+    db_handler.save_snapshot_result(result_entry=result_entry)
+
+
+def run_saver(database, publisher):
+
+    # TODO: Handle exceptions
+    mongo_handler = MongoHandler(path=database)
+    mq_handler = MQHandler(path=publisher)
+
+    mq_handler.init_saver_queue()
+
+    def callback(ch, method, properties, body):
+        json_message = json.loads(body)
+        parser_type = json_message[Common.TYPE_FIELD]
+        save_snapshot(db_handler=mongo_handler, json_message=json_message, topic=parser_type)
+
+    mq_handler.listen_to_saver_queue(callback=callback)
+
+
+
