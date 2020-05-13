@@ -28,6 +28,10 @@
     >>> upload_sample(host='127.0.0.1', port=8000, path='sample.mind.gzip')
     ...
     ```
+First Header | Second Header
+------------ | -------------
+Content from cell 1 | Content from cell 2
+Content in the first column | Content in the second column
 ```
 errno | 
 ------------ | -------------
