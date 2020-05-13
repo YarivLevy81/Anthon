@@ -14,7 +14,8 @@ USER_TYPE = 'user'
 
 
 class UnsupportedSchemeException(Exception):
-    pass
+    def __init__(self, scheme):
+        self.scheme = scheme
 
 
 class bcolors:

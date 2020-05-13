@@ -1,11 +1,16 @@
 import click
 from flask import Flask, jsonify, request
-from .anthon_pb2 import ServerMessage, User
+from Anton.anthon_pb2 import ServerMessage, User
 from uuid import uuid4
 from pathlib import Path
-from .mq_handler import MQHandler
+from Anton.mq_handler import MQHandler, UnsupportedSchemeException
 import json
 import Anton.common as Common
+from Anton.common import bcolors
+
+
+ERRNO_PERMISSION_DENIED = -2
+ERRNO_UNSUPPORTED_SCHEME = -3
 
 
 app = Flask(__name__)
@@ -29,7 +34,11 @@ def run_server_cli(host, port, publish):
 def run_server(host, port, publish):
     global _publish
     _publish = publish
-    app.run(host=host, port=port)
+    try:
+        app.run(host=host, port=port)
+    except PermissionError:
+        print(f'{bcolors.FAIL}ERROR: Can\'t bind server to {host}:{port}{bcolors.ENDC}')
+        exit(ERRNO_PERMISSION_DENIED)
 
     print(f'host={host}, port={port}, publish={publish}')
 
@@ -58,6 +67,7 @@ def new_user():
 @app.route('/msg', methods=['POST'])
 def new_message():
     data = request.data
+
     msg = ServerMessage()
     msg.ParseFromString(data)
 
@@ -92,8 +102,12 @@ def publish_message(message):
         _publish(message)
         return
 
-    mq_handler = MQHandler(_publish)
-    mq_handler.to_parsers(message)
+    try:
+        mq_handler = MQHandler(_publish)
+        mq_handler.to_parsers(message)
+    except UnsupportedSchemeException as e:
+        print(f'{bcolors.FAIL}ERROR: Publisher {e.scheme} is not supported{bcolors.ENDC}')
+        exit(ERRNO_UNSUPPORTED_SCHEME)
 
 
 def publish_user(message):

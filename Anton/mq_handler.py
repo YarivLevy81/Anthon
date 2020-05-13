@@ -15,7 +15,7 @@ class MQHandler:
     def __init__(self, path):
         url = furl(path)
         if url.scheme != "rabbitmq":
-            raise UnsupportedSchemeException(f'Only publisher supported is rabbitmq, ({url.scheme} is not supported)')
+            raise UnsupportedSchemeException(url.scheme)
 
         # Init of broker parameters
         self.params = pika.ConnectionParameters(host=url.host, port=url.port)

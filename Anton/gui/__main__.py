@@ -1,7 +1,5 @@
 import click
-import threading
 import Anton.gui.app as gui_app
-from Anton.api import run_api_server
 
 
 @click.group()
