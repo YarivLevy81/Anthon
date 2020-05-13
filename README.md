@@ -22,7 +22,7 @@
 
 ## Interfaces
 
-1. **Client** - upload sample to the server (assumes .mind file type)
+**1. Client - upload sample to the server (assumes .mind file type)**
     ```python
     >>> from Anton.client import upload_sample
     >>> upload_sample(host='127.0.0.1', port=8000, path='sample.mind.gzip')
@@ -34,14 +34,19 @@ errno | -
 -3 | File 'path' isn't .gz type
 -3 | Server at 'host':'port' issue
     
-2. **Server** - run server that forwards snapshots to other components,
-   publish can also be a function
+**2. Server - run server that forwards snapshots to other components,
+   publish can also be a function**
      ```python
     >>> from Anton.server import run_server
     >>> run_server(host='127.0.0.1', port=8000, publish="rabbitmq://127.0.0.1:5672") # publish to RabbitMQ
     >>> run_server(host='127.0.0.1', port=8000, publish=print) # print the message
     ...
     ```
+errno | -
+------------ | -------------
+-2 | Can't bind server to 'host':'port'
+-3 | provided publisher isn't supported
+
 3. **Parsers** - run parser of some type, publishing result if needed
     ```python
     >>> from Anton.parsers import run_parser
@@ -88,6 +93,11 @@ errno | -
     }
 
     ```
+errno | -
+------------ | -------------
+-2 | Can't bind server to 'host':'port'
+-3 | provided publisher isn't supported
+
 4. **Saver** - run saver (currently only MongoDB supported), integrated with RabbitMQ
     ```python
     >>> from Anton.saver import run_saver
