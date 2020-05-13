@@ -20,22 +20,33 @@
     [Anton] $
     ```
 
-## APIs
+## Interfaces
 
-1. **Client** - upload sample to the server (assumes .mind file type)
+**1. Client - upload sample to the server (assumes .mind file type)**
     ```python
     >>> from Anton.client import upload_sample
     >>> upload_sample(host='127.0.0.1', port=8000, path='sample.mind.gzip')
     ...
     ```
-2. **Server** - run server that forwards snapshots to other components,
-   publish can also be a function
+errno | -
+------------ | -------------
+-2 | File 'path' doesn't exist
+-3 | File 'path' isn't .gz type
+-3 | Server at 'host':'port' issue
+    
+**2. Server - run server that forwards snapshots to other components,
+   publish can also be a function**
      ```python
     >>> from Anton.server import run_server
     >>> run_server(host='127.0.0.1', port=8000, publish="rabbitmq://127.0.0.1:5672") # publish to RabbitMQ
     >>> run_server(host='127.0.0.1', port=8000, publish=print) # print the message
     ...
     ```
+errno | -
+------------ | -------------
+-2 | Can't bind server to 'host':'port'
+-3 | provided publisher isn't supported
+
 3. **Parsers** - run parser of some type, publishing result if needed
     ```python
     >>> from Anton.parsers import run_parser
@@ -82,6 +93,11 @@
     }
 
     ```
+errno | -
+------------ | -------------
+-2 | Can't bind server to 'host':'port'
+-3 | provided publisher isn't supported
+
 4. **Saver** - run saver (currently only MongoDB supported), integrated with RabbitMQ
     ```python
     >>> from Anton.saver import run_saver
@@ -95,7 +111,119 @@
     >>> save(database=database, topic=topic, path=path)
     >>> run_saver(database=database, publisher=publisher) # Currently only MongoDB (database), RabbitMQ (publisher) are supported
 .result files are similar to mentioned above. 
+
+5. **API** - run Anton's RESTFUL-API.
+    ```python
+    >>> from Anton.api import run_server
+    >>> run_server(host='127.0.0.1', port=5000, database="mongodb://127.0.0.1:27017")
+    ... # Only MongoDB is currently supported
+    ```
+
+6. **GUI** - run Anton's GUI.
+    ```python
+    >>> from Anton.gui import run_server
+    >>> run_server(
+    ...     host='127.0.0.1',
+    ...     port=8080,
+    ...     api_host='127.0.0.1'.
+    ...     api_port=5000
+    ...)
+    ```
+The GUI assumes a running API server (see section 5) in api_host:api_port.
+
+## CLI
+
+The following are supported - 
+```python
+    $ python -m Anton.cli get-users
+    … # JSON Array with users is returned
+    … [{"user_id": 1, "username": "Barak Obama"}]
     
+    $ python -m Anton.cli get-user 1
+    … # The parameter is the user_id 
+    … {"user_id": 1, "username": "Barak Obama", "birthdate": 12345678, "gender": 0}
+    
+    $ python -m Anton.cli get-snapshots 1
+    … # JSON Array with snapshots are returned (empty if no users inserted), The parameter is the user_id
+    … [{"snapshot_id": "6162e82630e1454d92f65b105ad75042", "timestamp": 1575446887339}, {"snapshot_id": "b7d510d93ce74b6e94a06a3e84c9926c", "timestamp": 1575446887412}, {"snapshot_id": "abd32178bd8343db869ab1386319bb8e", "timestamp": 1575446887476}]
+    
+    $ python -m Anton.cli get-snapshot 1 2
+    … # The parameters are user_id and snapshot_id
+    … {"snapshot_id": "6162e82630e1454d92f65b105ad75042", "timestamp": 1575446887339, "pose": {"translation_x": 0.4873843491077423, "translation_y": 0.007090016733855009, ... }}
+    
+    $ python -m Anton.cli get-result 1 2 'pose'
+    … # The parameters are user_id, snapshot_id an parser_type
+    … {"translation_x": 0.4873843491077423, "translation_y": 0.007090016733855009, "translation_z": -1.1306129693984985, "rotation_x": -0.10888676356214629, "rotation_y": -0.26755994585035286, "rotation_z": -0.021271118915446748, "rotation_w": 0.9571326384559261}
+    
+```
+For each of the commands, an empty JSON Object/Array will be returned on failure.
+
+## REST-API
+
+Default API host:port is '127.0.0.1':5000.
+
+The following are supported - 
+
+**`GET /users`**
+
+    $ curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users
+
+    HTTP/1.0 200 OK
+    Content-Type: application/json
+    Content-Length: 43
+    Server: Werkzeug/0.16.0 Python/3.8.2
+    Date: Wed, 13 May 2020 14:57:09 GMT
+
+    [{"user_id": 420666777420, "username": "Yariv Levy"}]
+
+**`GET /users/<user_id>`**
+
+    $ curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420
+
+    HTTP/1.0 200 OK
+    Content-Type: application/json
+    Content-Length: 43
+    Server: Werkzeug/0.16.0 Python/3.8.2
+    Date: Wed, 13 May 2020 14:57:09 GMT
+
+    {"user_id": 420666777420, "username": "Yariv Levy", "birthdate": 12345678, "gender": 0}
+
+**`GET /users/<user_id>/snapshots`**
+
+    $ curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420/snapshots
+
+    HTTP/1.0 200 OK
+    Content-Type: application/json
+    Content-Length: 43
+    Server: Werkzeug/0.16.0 Python/3.8.2
+    Date: Wed, 13 May 2020 14:57:09 GMT
+
+    [{"snapshot_id": "6162e82630e1454d92f65b105ad75042", "timestamp": 1575446887339}, {"snapshot_id": "b7d510d93ce74b6e94a06a3e84c9926c", "timestamp": 1575446887412}, {"snapshot_id": "abd32178bd8343db869ab1386319bb8e", "timestamp": 1575446887476}]
+    
+**`GET /users/<user_id>/snapshots/<user_id>`**
+
+    $ curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420/snapshots/6162e82630e1454d92f65b105ad75042
+
+    HTTP/1.0 200 OK
+    Content-Type: application/json
+    Content-Length: 43
+    Server: Werkzeug/0.16.0 Python/3.8.2
+    Date: Wed, 13 May 2020 14:57:09 GMT
+
+    {"snapshot_id": "6162e82630e1454d92f65b105ad75042", "timestamp": 1575446887339, "pose": {"translation_x": 0.4873843491077423, "translation_y": 0.007090016733855009, "translation_z": -1.1306129693984985, "rotation_x": -0.10888676356214629, "rotation_y": -0.26755994585035286, "rotation_z": -0.021271118915446748, "rotation_w": 0.9571326384559261}, "feelings": {"hunger": 0.0, "thirst": 0.0, "exhaustion": 0.0, "happiness": 0.0}, "depth_image": {"height": 1080, "width": 1920, "image_path": "/users_data/42/6162e82630e1454d92f65b105ad75042/depth_image.png"}, "color_image": {"height": 1080, "width": 1920, "image_path": "/users_data/42/6162e82630e1454d92f65b105ad75042/color_image.png"}}
+
+**`GET /users/<user_id>/snapshots/<user_id>/<result_id>`**
+
+    $ curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420/snapshots/6162e82630e1454d92f65b105ad75042/pose
+    
+    HTTP/1.0 200 OK
+    Content-Type: application/json
+    Content-Length: 43
+    Server: Werkzeug/0.16.0 Python/3.8.2
+    Date: Wed, 13 May 2020 14:57:09 GMT
+
+    {"translation_x": 0.4873843491077423, "translation_y": 0.007090016733855009, "translation_z": -1.1306129693984985, "rotation_x": -0.10888676356214629, "rotation_y": -0.26755994585035286, "rotation_z": -0.021271118915446748, "rotation_w": 0.9571326384559261}
+
 ## Testing
 
 You can run all unittests with the following command:
