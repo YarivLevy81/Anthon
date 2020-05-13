@@ -29,8 +29,8 @@
     ...
     ```
 ```
-errno  |  
------- | -------------
+errno | 
+------------ | -------------
 -2     | File 'path' doesn't exist
 -3     | File 'path' isn't .gz type
 -4     | Server at 'host':'port' issue
