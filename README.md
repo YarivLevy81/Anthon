@@ -28,17 +28,11 @@
     >>> upload_sample(host='127.0.0.1', port=8000, path='sample.mind.gzip')
     ...
     ```
-First Header | Second Header
------------- | -------------
-Content from cell 1 | Content from cell 2
-Content in the first column | Content in the second column
-```
 errno | 
 ------------ | -------------
--2     | File 'path' doesn't exist
--3     | File 'path' isn't .gz type
--4     | Server at 'host':'port' issue
-```
+-2 | File 'path' doesn't exist
+-3 | File 'path' isn't .gz type
+-3 | Server at 'host':'port' issue
     
 2. **Server** - run server that forwards snapshots to other components,
    publish can also be a function
