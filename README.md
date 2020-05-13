@@ -48,11 +48,36 @@
     ```
     parser_type is one of ['pose', 'color_image', 'depth_image', 'feelings'], data_path is a path to a file of the following format - 
     ```json
-    {"user_id": 420777666420, "username": "Yariv Levy", "birthdate": 123456789, "gender": 0, "snapshot_id": "2da3a844a5f640ce816cd8464e6d77d8", "snapshot_path": "/snapshots/2da3a844a5f640ce816cd8464e6d77d8.snp", "timestamp": 1575446887339}
+    {
+        "user_id": 420777666420, 
+        "username": "Yariv Levy", 
+        "birthdate": 123456789, 
+        "gender": 0, 
+        "snapshot_id": "2da3a844a5f640ce816cd8464e6d77d8", 
+        "snapshot_path": "/snapshots/2da3a844a5f640ce816cd8464e6d77d8.snp", 
+        "timestamp": 1575446887339
+    }
     ```
     result example ('pose') - 
     ```json
-    {"pose": {"translation_x": 0.4873843491077423, "translation_y": 0.007090016733855009, "translation_z": -1.1306129693984985, "rotation_x": -0.10888676356214629, "rotation_y": -0.26755994585035286, "rotation_z": -0.021271118915446748, "rotation_w": 0.9571326384559261}, "user_id": 420777666420, "username": "Yariv Levy", "birthdate": 123456789, "gender": 0, "snapshot_id": "2da3a844a5f640ce816cd8464e6d77d8", "snapshot_path": "/snapshots/2da3a844a5f640ce816cd8464e6d77d8.snp", "timestamp": 1575446887339}
+    {
+        "pose": {
+            "translation_x": 0.4873843491077423, 
+            "translation_y": 0.007090016733855009, 
+            "translation_z": -1.1306129693984985, 
+            "rotation_x": -0.10888676356214629, 
+            "rotation_y": -0.26755994585035286, 
+            "rotation_z": -0.021271118915446748, 
+            "rotation_w": 0.9571326384559261
+        }, 
+        "user_id": 420777666420, 
+        "username": "Yariv Levy", 
+        "birthdate": 123456789, 
+        "gender": 0, 
+        "snapshot_id": "2da3a844a5f640ce816cd8464e6d77d8", 
+        "snapshot_path": "/snapshots/2da3a844a5f640ce816cd8464e6d77d8.snp", 
+        "timestamp": 1575446887339
+    }
 
     ```
 
