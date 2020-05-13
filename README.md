@@ -23,16 +23,17 @@
 ## APIs
 
 1. client - upload sample to the server (assumes .mind file type)
-    ```sh
+    ```python
     >>> from Anthon.client import upload_sample
     >>> upload_sample(host='127.0.0.1', port=8000, path='sample.mind.gzip')
     ...
     ```
 2. server - run server that forwards snapshots to other components,
    publish can also be a function
-     ```sh
+     ```python
     >>> from Anthon.server import run_server
-    >>> run_server(host='127.0.0.1', port=8000, publish="rabbitmq://127.0.0.1:5672")
+    >>> run_server(host='127.0.0.1', port=8000, publish="rabbitmq://127.0.0.1:5672") # publish to rabbbit
+    >>> run_server(host='127.0.0.1', port=8000, publish=print) # print the message
     ...
     ```
 
