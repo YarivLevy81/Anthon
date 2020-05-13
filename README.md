@@ -94,6 +94,7 @@
     >>> ...
     >>> save(database=database, topic=topic, path=path)
     >>> run_saver(database=database, publisher=publisher) # Currently only MongoDB (database), RabbitMQ (publisher) are supported
+.result files are similar to mentioned above. 
     
 ## Testing
 
