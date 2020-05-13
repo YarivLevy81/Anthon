@@ -141,8 +141,74 @@ For each of the commands, an empty JSON Object/Array will be returned on failure
 
 ## REST-API
 
+Default API host:port is '127.0.0.1':5000.
+
 The following are supported - 
 
+### Request
+
+`GET /users/<user_id>`
+
+    curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420
+
+### Response
+
+    HTTP/1.0 200 OK
+    Content-Type: application/json
+    Content-Length: 43
+    Server: Werkzeug/0.16.0 Python/3.8.2
+    Date: Wed, 13 May 2020 14:57:09 GMT
+
+    {"user_id": 420666777420, "username": "Yariv Levy", "birthdate": 12345678, "gender": 0}
+
+
+### Request
+
+`GET /users/<user_id>/snapshots`
+
+    curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420/snapshots
+
+### Response
+
+    HTTP/1.0 200 OK
+    Content-Type: application/json
+    Content-Length: 43
+    Server: Werkzeug/0.16.0 Python/3.8.2
+    Date: Wed, 13 May 2020 14:57:09 GMT
+
+    [{"snapshot_id": "6162e82630e1454d92f65b105ad75042", "timestamp": 1575446887339}, {"snapshot_id": "b7d510d93ce74b6e94a06a3e84c9926c", "timestamp": 1575446887412}, {"snapshot_id": "abd32178bd8343db869ab1386319bb8e", "timestamp": 1575446887476}]
+    
+### Request
+
+`GET /users/<user_id>/snapshots/<user_id>`
+
+    curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420/snapshots/6162e82630e1454d92f65b105ad75042
+
+### Response
+
+    HTTP/1.0 200 OK
+    Content-Type: application/json
+    Content-Length: 43
+    Server: Werkzeug/0.16.0 Python/3.8.2
+    Date: Wed, 13 May 2020 14:57:09 GMT
+
+    {"snapshot_id": "6162e82630e1454d92f65b105ad75042", "timestamp": 1575446887339, "pose": {"translation_x": 0.4873843491077423, "translation_y": 0.007090016733855009, "translation_z": -1.1306129693984985, "rotation_x": -0.10888676356214629, "rotation_y": -0.26755994585035286, "rotation_z": -0.021271118915446748, "rotation_w": 0.9571326384559261}, "feelings": {"hunger": 0.0, "thirst": 0.0, "exhaustion": 0.0, "happiness": 0.0}, "depth_image": {"height": 1080, "width": 1920, "image_path": "/users_data/42/6162e82630e1454d92f65b105ad75042/depth_image.png"}, "color_image": {"height": 1080, "width": 1920, "image_path": "/users_data/42/6162e82630e1454d92f65b105ad75042/color_image.png"}}
+    
+### Request
+
+`GET /users/<user_id>/snapshots/<user_id>/<result_id>`
+
+    curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420/snapshots/6162e82630e1454d92f65b105ad75042/pose
+
+### Response
+
+    HTTP/1.0 200 OK
+    Content-Type: application/json
+    Content-Length: 43
+    Server: Werkzeug/0.16.0 Python/3.8.2
+    Date: Wed, 13 May 2020 14:57:09 GMT
+
+    {"translation_x": 0.4873843491077423, "translation_y": 0.007090016733855009, "translation_z": -1.1306129693984985, "rotation_x": -0.10888676356214629, "rotation_y": -0.26755994585035286, "rotation_z": -0.021271118915446748, "rotation_w": 0.9571326384559261}
 
 ## Testing
 
