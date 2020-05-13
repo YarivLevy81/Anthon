@@ -4,6 +4,6 @@ python:
 install:
   - pip install -r requirements.txt
 script:
-  - pytest --cov=Anthon tests/
+  - pytest --cov=Anton tests/
 after_success:
   - codecov

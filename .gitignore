@@ -5,7 +5,7 @@ venv/
 .idea/
 .DS_Store
 __pycache__/
-Anthon/gui/flask/
+Anton/gui/flask/
 snapshots/
 users_data/
 data/

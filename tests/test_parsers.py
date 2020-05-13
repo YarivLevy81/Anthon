@@ -1,6 +1,5 @@
-import pytest
 import json
-from Anthon.parsers.__main__ import parse
+from Anton.parsers import parse
 
 
 def test_pose_parser():

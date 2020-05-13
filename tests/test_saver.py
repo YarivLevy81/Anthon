@@ -1,7 +1,7 @@
 import pytest
 import mongomock
-from Anthon.saver.__main__ import save
-from Anthon.saver.MongoHandler import MongoHandler
+from Anton.saver import save
+from Anton.saver.MongoHandler import MongoHandler
 
 
 @mongomock.patch(servers=(('127.0.0.1', 27017),))

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Snapshot {{ snapshot.snapshot_id }}</title>
+
+    <!-- Bootstrap core CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet">
+  </head>
+  <body>
+
+<main role="main">
+
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1 class="jumbotron-heading">Anton</h1>
+      <p class="lead text-muted">User {{ user.user_id }}</p>
+      <p class="lead text-muted">Snapshot {{ snapshot.snapshot_id }}</p>
+      <img src="{{ url_for('static', filename='Gilfoyle2.gif') }}" alt="this slowpoke moves"  width="250" alt="404 image"/>
+    </div>
+  </section>
+
+  <div class="album py-5 bg-light">
+    <div class="container">
+      <div class="row">
+        {% if color_image %}
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{ urls.color_image }}" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"></img>
+            <div class="card-body">
+              <p class="card-text"><b>Color Image</b></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <a type="button" href="{{ urls.color_image }}" class="btn btn-sm btn-outline-secondary">View</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        {% if depth_image %}
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{ urls.depth_image }}" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"></img>
+            <div class="card-body">
+              <p class="card-text"><b>Depth Image</b></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <a type="button" href="{{ urls.depth_image }}" class="btn btn-sm btn-outline-secondary">View</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        {% if feelings %}
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <small class="text-muted"><b>   Hunger = {{ feelings_data.hunger }}</b></small>
+            <small class="text-muted"><b>   Thirst = {{ feelings_data.thirst }}</b></small>
+            <small class="text-muted"><b>   Exhaustion = {{ feelings_data.exhaustion }}</b></small>
+            <small class="text-muted"><b>   Happiness = {{ feelings_data.happiness }}</b></small>
+            <div class="card-body">
+              <p class="card-text"><b>Feelings</b></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <a type="button" href="{{ urls.feelings }}" class="btn btn-sm btn-outline-secondary">As JSON</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        {% if pose %}
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <p class="text-muted"></p>
+            <small class="text-muted"><b>   Translation: (x, y, z) = ({{ pose_data.translation_x }}, {{ pose_data.translation_y }}, {{ pose_data.translation_z }})</b></small>
+            <small class="text-muted"><b>   Rotation: (x, y, z, w) = ({{ pose_data.rotation_x }}, {{ pose_data.rotation_y }}, {{ pose_data.rotation_z }}, {{ pose_data.rotation_w }})</b></small>
+            <div class="card-body">
+              <p class="card-text"><b>Pose</b></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <a type="button" href="{{ urls.pose }}" class="btn btn-sm btn-outline-secondary">As JSON</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

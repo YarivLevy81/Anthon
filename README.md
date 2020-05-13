@@ -8,8 +8,8 @@
 1. Clone the repository:
 
     ```sh
-    $ git clone https://github.com/YarivLevy81/Anthon.git
-    $ cd Anthon/
+    $ git clone https://github.com/YarivLevy81/Anton.git
+    $ cd Anton/
     ```
 
 2. Run installation, acitvate environment:
@@ -17,29 +17,29 @@
     ```sh
     $ ./scripts/install.sh
     $ source .env/bin/activate
-    [Anthon] $
+    [Anton] $
     ```
 
 ## APIs
 
 1. **Client** - upload sample to the server (assumes .mind file type)
     ```python
-    >>> from Anthon.client import upload_sample
+    >>> from Anton.client import upload_sample
     >>> upload_sample(host='127.0.0.1', port=8000, path='sample.mind.gzip')
     ...
     ```
 2. **Server** - run server that forwards snapshots to other components,
    publish can also be a function
      ```python
-    >>> from Anthon.server import run_server
+    >>> from Anton.server import run_server
     >>> run_server(host='127.0.0.1', port=8000, publish="rabbitmq://127.0.0.1:5672") # publish to RabbitMQ
     >>> run_server(host='127.0.0.1', port=8000, publish=print) # print the message
     ...
     ```
 3. **Parsers** - run parser of some type, publishing result if needed
     ```python
-    >>> from Anthon.parsers import run_parser
-    >>> from Anthon.parsers import parse
+    >>> from Anton.parsers import run_parser
+    >>> from Anton.parsers import parse
     >>> ...
     >>> parser_type = 'pose'
     >>> data_path = '/snapshots/2da3a844a5f640ce816cd8464e6d77d8.raw'
@@ -84,8 +84,8 @@
     ```
 4. **Saver** - run saver (currently only MongoDB supported), integrated with RabbitMQ
     ```python
-    >>> from Anthon.saver import run_saver
-    >>> from Anthon.saver import saver
+    >>> from Anton.saver import run_saver
+    >>> from Anton.saver import saver
     >>> ...
     >>> database = 'mongodb://127.0.0.1:27017'
     >>> topic = 'pose'

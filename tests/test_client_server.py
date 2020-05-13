@@ -1,10 +1,9 @@
-import pytest
-import Anthon.server as server
-import Anthon.client as client
+import Anton.server as server
+import Anton.client as client
 
 
 def test_reader():
-    import Anthon.snapshot_reader as rdr
+    import Anton.snapshot_reader as rdr
     reader = rdr.SampleReader("./tests/mock_data/1_sample.mind.gzip")
 
     error_msg = f'Failed in reader, {0}'

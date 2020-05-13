@@ -16,7 +16,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anthon.server run-server -h '0.0.0.0' -p 8000 'rabbitmq://rabbitmq:5672'
+    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anton.server run-server -h '0.0.0.0' -p 8000 'rabbitmq://rabbitmq:5672'
     ports:
     - "8000:8000"
     links:
@@ -32,7 +32,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anthon.parsers run-parser 'pose' 'rabbitmq://rabbitmq:5672/'
+    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anton.parsers run-parser 'pose' 'rabbitmq://rabbitmq:5672/'
     links:
       - "rabbitmq"
     depends_on:
@@ -46,7 +46,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anthon.parsers run-parser 'feelings' 'rabbitmq://rabbitmq:5672/'
+    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anton.parsers run-parser 'feelings' 'rabbitmq://rabbitmq:5672/'
     links:
       - "rabbitmq"
     depends_on:
@@ -60,7 +60,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anthon.parsers run-parser 'color_image' 'rabbitmq://rabbitmq:5672/'
+    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anton.parsers run-parser 'color_image' 'rabbitmq://rabbitmq:5672/'
     links:
       - "rabbitmq"
     depends_on:
@@ -74,7 +74,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anthon.parsers run-parser 'depth_image' 'rabbitmq://rabbitmq:5672/'
+    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anton.parsers run-parser 'depth_image' 'rabbitmq://rabbitmq:5672/'
     links:
       - "rabbitmq"
     depends_on:
@@ -88,7 +88,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anthon.saver run-saver 'mongodb://mongodb:27017' 'rabbitmq://rabbitmq:5672'
+    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anton.saver run-saver 'mongodb://mongodb:27017' 'rabbitmq://rabbitmq:5672'
     links:
       - "rabbitmq"
       - "mongodb"
@@ -100,7 +100,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anthon.api run-server -h '0.0.0.0' -p 5000 -d 'mongodb://mongodb:27017'
+    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anton.api run-server -h '0.0.0.0' -p 5000 -d 'mongodb://mongodb:27017'
     ports:
       - "5000:5000"
     networks:
@@ -115,7 +115,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anthon.gui run-server -h '0.0.0.0' -p 8080 -H 'api' -P 5000
+    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anton.gui run-server -h '0.0.0.0' -p 8080 -H 'api' -P 5000
     ports:
       - "8080:8080"
     networks:
