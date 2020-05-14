@@ -34,7 +34,7 @@ errno | -
 ------------ | -------------
 -2 | File 'path' doesn't exist
 -3 | File 'path' isn't .gz type
--3 | Server at 'host':'port' issue
+-4 | Server at 'host':'port' issue
     
 **2. Server - run server that forwards snapshots to other components,
    publish can also be a function**
@@ -51,7 +51,7 @@ errno | -
 -2 | Can't bind server to 'host':'port'
 -3 | provided publisher isn't supported
 
-3. **Parsers - run parser of some type, publishing result if needed **
+**3. Parsers - run parser of some type, publishing result if needed **
 
     ```python
     >>> from Anton.parsers import run_parser
@@ -105,8 +105,11 @@ errno | -
     
 errno | -
 ------------ | -------------
--2 | Can't bind server to 'host':'port'
--3 | provided publisher isn't supported
+-2 | Parser type unknown
+-3 | File 'path' doesn't exist
+-4 | File 'path' formatted (see above)
+-5 | provided publisher isn't supported
+
 
 4. **Saver** - run saver (currently only MongoDB supported), integrated with RabbitMQ
     ```python
