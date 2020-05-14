@@ -1,5 +1,6 @@
+import pytest
 import json
-from Anton.parsers import parse
+from Anton.parsers import parse, run_parser
 
 
 def test_pose_parser():
@@ -63,3 +64,22 @@ def test_feelings_parser():
     assert result['thirst'] == 0.0, err_msg.format('thirst')
     assert result['exhaustion'] == 0.0, err_msg.format('exhaustion')
     assert result['happiness'] == 0.0, err_msg.format('happiness')
+
+
+def test_error_handle():
+    with pytest.raises(SystemExit) as se:
+        parse(parser_type="Garbage", path=".")  # No 'Garbage' parser
+    assert se.value.code == -2
+
+    with pytest.raises(SystemExit) as se:
+        run_parser(parser_type="Garbage", publisher="rabbit://127.0.0.1:5672")  # No 'Garbage' parser
+    assert se.value.code == -2
+
+    with pytest.raises(SystemExit) as se:
+        parse(parser_type="pose", path=".XAXA")  # It's not a file
+    assert se.value.code == -3
+
+    with pytest.raises(SystemExit) as se:
+        parse(parser_type='pose', path="./tests/mock_data/mock.snp")  # mock.snp file is not formatted
+    assert se.value.code == -4
+

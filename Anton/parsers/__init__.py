@@ -42,7 +42,7 @@ def parse(parser_type, path):
         print(json.dumps(result))
         return json.dumps(result)
 
-    except KeyError or json.decoder.JSONDecodeError or FileNotFoundError:
+    except (KeyError, json.decoder.JSONDecodeError, FileNotFoundError, UnicodeDecodeError):
         print(f'{bcolors.FAIL}ERROR: File {path} is not formatted (see docs){bcolors.ENDC}')
         exit(ERRNO_FILE_FORMAT)
 
