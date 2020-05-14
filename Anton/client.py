@@ -27,7 +27,7 @@ def upload_sample_cli(host, port, path):
 def upload_sample(host, port, path):
     print(f'Uploading sample - host={host}, port={port}, path={path}')
 
-    if not pathlib.Path(path).exists():
+    if not pathlib.Path(path).exists() or not pathlib.Path(path).is_file():
         print(f'{bcolors.FAIL}ERROR: No such file {path} {bcolors.ENDC}')
         exit(ERRNO_FILE_NOT_EXIST)
 

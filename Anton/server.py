@@ -35,6 +35,7 @@ def run_server(host, port, publish):
     global _publish
     _publish = publish
     try:
+        check_publisher()
         app.run(host=host, port=port)
     except PermissionError:
         print(f'{bcolors.FAIL}ERROR: Can\'t bind server to {host}:{port}{bcolors.ENDC}')
@@ -108,6 +109,18 @@ def publish_message(message):
     except UnsupportedSchemeException as e:
         print(f'{bcolors.FAIL}ERROR: Publisher {e.scheme} is not supported{bcolors.ENDC}')
         exit(ERRNO_UNSUPPORTED_SCHEME)
+
+
+def check_publisher():
+    if callable(_publish):
+        return True
+
+    try:
+        mq_handler = MQHandler(_publish)
+    except UnsupportedSchemeException as e:
+        print(f'{bcolors.FAIL}ERROR: Publisher {e.scheme} is not supported{bcolors.ENDC}')
+        exit(ERRNO_UNSUPPORTED_SCHEME)
+    return True
 
 
 def publish_user(message):
