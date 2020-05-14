@@ -23,11 +23,13 @@
 ## Interfaces
 
 **1. Client - upload sample to the server (assumes .mind file type)**
+
     ```python
     >>> from Anton.client import upload_sample
     >>> upload_sample(host='127.0.0.1', port=8000, path='sample.mind.gzip')
     ...
     ```
+    
 errno | -
 ------------ | -------------
 -2 | File 'path' doesn't exist
@@ -36,18 +38,21 @@ errno | -
     
 **2. Server - run server that forwards snapshots to other components,
    publish can also be a function**
+   
      ```python
     >>> from Anton.server import run_server
     >>> run_server(host='127.0.0.1', port=8000, publish="rabbitmq://127.0.0.1:5672") # publish to RabbitMQ
     >>> run_server(host='127.0.0.1', port=8000, publish=print) # print the message
     ...
     ```
+    
 errno | -
 ------------ | -------------
 -2 | Can't bind server to 'host':'port'
 -3 | provided publisher isn't supported
 
-3. **Parsers** - run parser of some type, publishing result if needed
+3. **Parsers - run parser of some type, publishing result if needed **
+
     ```python
     >>> from Anton.parsers import run_parser
     >>> from Anton.parsers import parse
@@ -59,7 +64,9 @@ errno | -
     >>> parse(parser_type=parser_type, path=data_path)
     >>> run_praser(parser_type=parser_type, publisher=publisher) # Currently only RabbitMQ publisher is supported
     ```
+    
     parser_type is one of ['pose', 'color_image', 'depth_image', 'feelings'], data_path is a path to a file of the following format - 
+    
     ```json
     {
         "user_id": 420777666420, 
@@ -71,7 +78,9 @@ errno | -
         "timestamp": 1575446887339
     }
     ```
+    
     result example ('pose') - 
+    
     ```json
     {
         "pose": {
@@ -93,6 +102,7 @@ errno | -
     }
 
     ```
+    
 errno | -
 ------------ | -------------
 -2 | Can't bind server to 'host':'port'
