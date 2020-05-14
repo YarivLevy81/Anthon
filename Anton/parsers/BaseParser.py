@@ -24,7 +24,7 @@ class BaseParser:
             snapshot = Snapshot()
             snapshot.ParseFromString(data)
         else:
-            raise Exception("No such file " + path)
+            raise FileNotFoundError("No such file " + path)
 
         return snapshot
 

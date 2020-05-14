@@ -7,33 +7,52 @@ import json
 import signal
 import Anton.mq_handler as MQHandler
 import Anton.common as Common
+import pathlib
+from Anton.common import bcolors
+
+ERRNO_UNKNOWN_PARSER_TYPE = -2
+ERRNO_FILE_NOT_EXIST = - 3
+ERRNO_FILE_FORMAT = -4
+ERRNO_UNSUPPORTED_SCHEME = -5
 
 
 def parse(parser_type, path):
     parser = init_parser_type(parser_type)
+    if parser is None:
+        print(f'{bcolors.FAIL}ERROR: parser {parser_type} is not supported{bcolors.ENDC}')
+        exit(ERRNO_UNKNOWN_PARSER_TYPE)
 
-    file = open(path, 'rb')
-    data = file.read()
-    json_data = json.loads(data)
+    if not pathlib.Path(path).exists() or not pathlib.Path(path).is_file():
+        print(f'{bcolors.FAIL}ERROR: No such file {path} {bcolors.ENDC}')
+        exit(ERRNO_FILE_NOT_EXIST)
 
-    snapshot_path = json_data[Common.SNAPSHOT_PATH_FIELD]
-    user_id       = json_data[Common.USER_ID_FIELD]
-    snapshot_id   = json_data[Common.SNAPSHOT_ID_FIELD]
+    try:
+        file = open(path, 'rb')
+        data = file.read()
+        json_data = json.loads(data)
 
-    session = Session(user_id=user_id, snapshot_id=snapshot_id)
-    result = parser.parse(snapshot_path, session)
-    result.update(json_data)
+        snapshot_path = json_data[Common.SNAPSHOT_PATH_FIELD]
+        user_id       = json_data[Common.USER_ID_FIELD]
+        snapshot_id   = json_data[Common.SNAPSHOT_ID_FIELD]
 
-    print(json.dumps(result))
-    return json.dumps(result)
+        session = Session(user_id=user_id, snapshot_id=snapshot_id)
+        result = parser.parse(snapshot_path, session)
+        result.update(json_data)
+
+        print(json.dumps(result))
+        return json.dumps(result)
+
+    except KeyError or json.decoder.JSONDecodeError or FileNotFoundError:
+        print(f'{bcolors.FAIL}ERROR: File {path} is not formatted (see docs){bcolors.ENDC}')
+        exit(ERRNO_FILE_FORMAT)
 
 
 def run_parser(parser_type, publisher):
     print(f'Running {parser_type} parser..')
     parser = init_parser_type(parser_type)
-
-    mq_handler = MQHandler.MQHandler(publisher)
-    mq_handler.init_parser_queue(queue_name=parser_type, exchange_type=MQHandler.PARSERS_EXCHANGE_TYPE)
+    if parser is None:
+        print(f'{bcolors.FAIL}ERROR: parser {parser_type} is not supported{bcolors.ENDC}')
+        exit(ERRNO_UNKNOWN_PARSER_TYPE)
 
     def callback(ch, method, properties, body):
         message = json.loads(body)
@@ -48,15 +67,20 @@ def run_parser(parser_type, publisher):
 
         mq_handler.to_saver(message=saver_message)
 
-    # This line will block until SIGINT\SIGTERM\SIGKILL is received
-    mq_handler.listen_to_queue(queue_name=parser_type, callback=callback)
-
     def signal_handler(sig, frame):
         print(f'Stopping {parser_type} parser')
         mq_handler.channel.queue_delete(queue=parser_type)
         exit(0)
 
-    signal.signal(signal.SIGINT, signal_handler)
+    try:
+        mq_handler = MQHandler.MQHandler(publisher)
+        mq_handler.init_parser_queue(queue_name=parser_type, exchange_type=MQHandler.PARSERS_EXCHANGE_TYPE)
+        # This line will block until SIGINT\SIGTERM\SIGKILL is received
+        mq_handler.listen_to_queue(queue_name=parser_type, callback=callback)
+        signal.signal(signal.SIGINT, signal_handler)
+    except Common.UnsupportedSchemeException as e:
+        print(f'{bcolors.FAIL}ERROR: Publisher {e.scheme} is not supported{bcolors.ENDC}')
+        exit(ERRNO_UNSUPPORTED_SCHEME)
 
 
 def init_parser_type(parser_type: str):
@@ -72,5 +96,7 @@ def init_parser_type(parser_type: str):
 
     if parser_type == ColorImageParser.parser_type:
         return ColorImageParser()
+
+    return None
 
 
