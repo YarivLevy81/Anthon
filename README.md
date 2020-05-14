@@ -34,7 +34,7 @@ errno | -
 ------------ | -------------
 -2 | File 'path' doesn't exist
 -3 | File 'path' isn't .gz type
--3 | Server at 'host':'port' issue
+-4 | Server at 'host':'port' issue
     
 **2. Server - run server that forwards snapshots to other components,
    publish can also be a function**
