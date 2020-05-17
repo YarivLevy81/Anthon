@@ -1,5 +1,9 @@
 import click
 import Anton.gui.app as gui_app
+from Anton.common import bcolors
+
+
+ERRNO_PERMISSION_DENIED = -2
 
 
 @click.group()
@@ -13,7 +17,12 @@ def run_gui_server(host, port, api_host, api_port):
     app.config['port'] = port
     app.config['api_host'] = api_host
     app.config['api_port'] = api_port
-    app.run(host=host, port=port)
+
+    try:
+        app.run(host=host, port=port)
+    except PermissionError:
+        print(f'{bcolors.FAIL}ERROR: Can\'t bind server to {host}:{port}{bcolors.ENDC}')
+        exit(ERRNO_PERMISSION_DENIED)
 
 
 @main.command('run-server')

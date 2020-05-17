@@ -3,10 +3,13 @@ import click
 from Anton.saver.MongoHandler import MongoHandler
 import json
 import Anton.common as Common
+from Anton.common import bcolors
 
 app = Flask(__name__)
 _database = None
 headers = {"Content-Type": "application/json"}
+
+ERRNO_PERMISSION_DENIED = -2
 
 
 @click.group()
@@ -24,9 +27,12 @@ def run_server(host, port, database):
 
 def run_api_server(host, port, database):
     global _database
-    #print(f'Running API: host={host}, port={port}, database={database}')
     _database = MongoHandler(database)
-    app.run(host=host, port=port)
+    try:
+        app.run(host=host, port=port)
+    except PermissionError:
+        print(f'{bcolors.FAIL}ERROR: Can\'t bind server to {host}:{port}{bcolors.ENDC}')
+        exit(ERRNO_PERMISSION_DENIED)
 
 
 @app.route("/users", methods=['GET'])
