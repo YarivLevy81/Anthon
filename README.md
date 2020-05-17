@@ -65,7 +65,7 @@ errno | -
     >>> run_praser(parser_type=parser_type, publisher=publisher) # Currently only RabbitMQ publisher is supported
     ```
     
-    parser_type is one of ['pose', 'color_image', 'depth_image', 'feelings'], data_path is a path to a file of the following format - 
+parser_type is one of ['pose', 'color_image', 'depth_image', 'feelings'], data_path is a path to a file of the following format - 
     
     ```json
     {
