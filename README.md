@@ -110,17 +110,19 @@ errno | -
 
 
 4. **Saver** - run saver (currently only MongoDB supported), integrated with RabbitMQ
-    ```python
-    >>> from Anton.saver import run_saver
-    >>> from Anton.saver import saver
-    >>> ...
-    >>> database = 'mongodb://127.0.0.1:27017'
-    >>> topic = 'pose'
-    >>> path = '/data/pose.result'
-    >>> publisher = 'rabbitmq://127.0.0.1:5672'
-    >>> ...
-    >>> save(database=database, topic=topic, path=path)
-    >>> run_saver(database=database, publisher=publisher) # Currently only MongoDB (database), RabbitMQ (publisher) are supported
+```python
+>>> from Anton.saver import run_saver
+>>> from Anton.saver import saver
+>>> ...
+>>> database = 'mongodb://127.0.0.1:27017'
+>>> topic = 'pose'
+>>> path = '/data/pose.result'
+>>> publisher = 'rabbitmq://127.0.0.1:5672'
+>>> ...
+>>> save(database=database, topic=topic, path=path)
+>>> run_saver(database=database, publisher=publisher) # Currently only MongoDB (database), RabbitMQ (publisher) are supported
+```
+
 .result files are similar to mentioned above. 
 
 errno | -
@@ -174,8 +176,8 @@ The following are supported -
     $ python -m Anton.cli get-result 1 2 'pose'
     … # The parameters are user_id, snapshot_id an parser_type
     … {"translation_x": 0.4873843491077423, "translation_y": 0.007090016733855009, "translation_z": -1.1306129693984985, "rotation_x": -0.10888676356214629, "rotation_y": -0.26755994585035286, "rotation_z": -0.021271118915446748, "rotation_w": 0.9571326384559261}
-    
 ```
+    
 For each of the commands, an empty JSON Object/Array will be returned on failure.
 
 ## REST-API
