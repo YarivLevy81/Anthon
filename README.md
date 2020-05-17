@@ -7,14 +7,14 @@
 
 1. Clone the repository:
 
-    ```sh
+    ```js
     $ git clone https://github.com/YarivLevy81/Anton.git
     $ cd Anton/
     ```
 
 2. Run installation, acitvate environment:
 
-    ```sh
+    ```js
     $ ./scripts/install.sh
     $ source .env/bin/activate
     [Anton] $
