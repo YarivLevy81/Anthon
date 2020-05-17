@@ -139,6 +139,10 @@ errno | -
 ... # Only MongoDB is currently supported
 ```
 
+errno | -
+------------ | -------------
+-2 | Can't bind api to 'host':'port'
+
 6. **GUI** - run Anton's GUI.
 
 ```python
@@ -152,6 +156,11 @@ errno | -
 ```
 
 The GUI assumes a running API server (see section 5) in api_host:api_port.
+
+errno | -
+------------ | -------------
+-2 | Can't bind gui-server to 'host':'port'
+
 
 ## CLI
 
