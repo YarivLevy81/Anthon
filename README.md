@@ -39,7 +39,7 @@ errno | -
 **2. Server - run server that forwards snapshots to other components,
    publish can also be a function**
    
-     ```python
+    ```python
     >>> from Anton.server import run_server
     >>> run_server(host='127.0.0.1', port=8000, publish="rabbitmq://127.0.0.1:5672") # publish to RabbitMQ
     >>> run_server(host='127.0.0.1', port=8000, publish=print) # print the message
@@ -79,7 +79,7 @@ parser_type is one of ['pose', 'color_image', 'depth_image', 'feelings'], data_p
     }
     ```
     
-    result example ('pose') - 
+result example ('pose') - 
     
     ```json
     {
