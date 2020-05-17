@@ -1,6 +1,8 @@
 import pytest
 import Anton.server as server
 import Anton.client as client
+from Anton.server import *
+from Anton.client import *
 
 
 def test_reader():
@@ -45,26 +47,26 @@ def test_server_client_3sample():
 def test_error_handle_client():
     with pytest.raises(SystemExit) as se:
         client.upload_sample('127.0.0.1', port=7777, path="./tests/mock_data/.")  # Directory
-    assert se.value.code == -2
+    assert se.value.code == ERRNO_FILE_NOT_EXIST
 
     with pytest.raises(SystemExit) as se:
         client.upload_sample('127.0.0.1', port=7777, path="./tests/mock_data/WTFWTWFTWFW")  # No such file
-    assert se.value.code == -2
+    assert se.value.code == ERRNO_FILE_NOT_EXIST
 
     with pytest.raises(SystemExit) as se:
         client.upload_sample('127.0.0.1', port=7777, path="./tests/mock_data/mock.raw")  # Not .gz file
-    assert se.value.code == -3
+    assert se.value.code == ERRNO_FILE_NOT_GZIP
 
     with pytest.raises(SystemExit) as se:
         client.upload_sample('127.0.0.1', port=7777, path="./tests/mock_data/1_sample.mind.gzip")  # No server available
-    assert se.value.code == -4
+    assert se.value.code == ERRNO_SERVER_UNAVAILABLE
 
 
 def test_error_handle_server():
     with pytest.raises(SystemExit) as se:
         server.run_server('127.0.0.1', port=1, publish=print)  # Can't bind host:port
-    assert se.value.code == -2
+    assert se.value.code == ERRNO_FILE_NOT_EXIST
 
     with pytest.raises(SystemExit) as se:
         server.run_server('127.0.0.1', port=7777, publish="mongodb://127.0.0.1:27017")  # Unsupported publisher
-    assert se.value.code == -3
+    assert se.value.code == ERRNO_UNSUPPORTED_SCHEME
