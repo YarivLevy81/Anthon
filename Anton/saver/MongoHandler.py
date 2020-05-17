@@ -16,7 +16,6 @@ class DBHandler:
 
 
 class ResultEntry:
-
     def __init__(self, user_id, snapshot_id, snapshot_path, timestamp, result_type, result_data):
         self.user_id       = user_id
         self.snapshot_id   = snapshot_id
@@ -40,7 +39,6 @@ class ResultEntry:
 
 
 class UserEntry:
-
     def __init__(self, user_id, username, birthdate, gender):
         self.user_id    = user_id
         self.username   = username
@@ -58,11 +56,10 @@ class UserEntry:
 
 
 class MongoHandler(DBHandler):
-
     def __init__(self, path):
         url = furl(path)
         if url.scheme != "mongodb":
-            raise UnsupportedSchemeException(f'Only database supported is mongodb, ({url.scheme} is not supported)')
+            raise UnsupportedSchemeException(url.scheme)
 
         self.host = url.host
         self.port = url.port

@@ -4,26 +4,43 @@ from Anton.mq_handler import MQHandler
 from Anton.saver.MongoHandler import MongoHandler, ResultEntry, UserEntry
 import json
 import Anton.common as Common
+from Anton.common import bcolors
+import pathlib
 sys.path.append(os.path.join(os.path.dirname(__file__)))
 
 
+ERRNO_FILE_NOT_EXIST = -2
+ERRNO_FILE_FORMAT = -3
+ERRNO_UNSUPPORTED_SCHEME = -4
+
+
 def save(database, topic, path):
-    print(database)
-    # TODO: Handle exceptions
-    mongo_handler = MongoHandler(path=database)
-    print(type(path))
 
-    json_message = None
-    if type(path) == str:
-        file = open(path, 'rb')
-        json_message = json.loads(file.read())
-    elif type(path) == dict:
-        json_message = path
+    try:
+        mongo_handler = MongoHandler(path=database)
 
-    if topic not in json_message:
-        raise Warning("Result type of the data doesn't seem to match topic")
+        if not pathlib.Path(path).exists() or not pathlib.Path(path).is_file():
+            print(f'{bcolors.FAIL}ERROR: No such file {path} {bcolors.ENDC}')
+            exit(ERRNO_FILE_NOT_EXIST)
 
-    save_snapshot(db_handler=mongo_handler, json_message=json_message, topic=topic)
+        json_message = None
+        if type(path) == str:
+            file = open(path, 'rb')
+            json_message = json.loads(file.read())
+        elif type(path) == dict:
+            json_message = path
+
+        if topic not in json_message:
+            raise KeyError("Result type of the data doesn't seem to match topic")
+
+        save_snapshot(db_handler=mongo_handler, json_message=json_message, topic=topic)
+
+    except Common.UnsupportedSchemeException as e:
+        print(f'{bcolors.FAIL}ERROR: Database {e.scheme} is not supported{bcolors.ENDC}')
+        exit(ERRNO_UNSUPPORTED_SCHEME)
+    except (KeyError, json.decoder.JSONDecodeError, FileNotFoundError, UnicodeDecodeError):
+        print(f'{bcolors.FAIL}ERROR: File {path} is not formatted (see docs){bcolors.ENDC}')
+        exit(ERRNO_FILE_FORMAT)
 
 
 def save_snapshot(db_handler, json_message, topic):
@@ -47,18 +64,21 @@ def save_snapshot(db_handler, json_message, topic):
 
 def run_saver(database, publisher):
 
-    # TODO: Handle exceptions
-    mongo_handler = MongoHandler(path=database)
-    mq_handler = MQHandler(path=publisher)
+    try:
+        mongo_handler = MongoHandler(path=database)
+        mq_handler = MQHandler(path=publisher)
 
-    mq_handler.init_saver_queue()
+        mq_handler.init_saver_queue()
 
-    def callback(ch, method, properties, body):
-        json_message = json.loads(body)
-        parser_type = json_message[Common.TYPE_FIELD]
-        save_snapshot(db_handler=mongo_handler, json_message=json_message, topic=parser_type)
+        def callback(ch, method, properties, body):
+            json_message = json.loads(body)
+            parser_type = json_message[Common.TYPE_FIELD]
+            save_snapshot(db_handler=mongo_handler, json_message=json_message, topic=parser_type)
 
-    mq_handler.listen_to_saver_queue(callback=callback)
+        mq_handler.listen_to_saver_queue(callback=callback)
+    except Common.UnsupportedSchemeException as e:
+        print(f'{bcolors.FAIL}ERROR: Database {e.scheme} is not supported{bcolors.ENDC}')
+        exit(ERRNO_UNSUPPORTED_SCHEME)
 
 
 

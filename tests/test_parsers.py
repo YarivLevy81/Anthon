@@ -1,6 +1,5 @@
 import pytest
-import json
-from Anton.parsers import parse, run_parser
+from Anton.parsers import *
 
 
 def test_pose_parser():
@@ -69,17 +68,17 @@ def test_feelings_parser():
 def test_error_handle():
     with pytest.raises(SystemExit) as se:
         parse(parser_type="Garbage", path=".")  # No 'Garbage' parser
-    assert se.value.code == -2
+    assert se.value.code == ERRNO_UNKNOWN_PARSER_TYPE
 
     with pytest.raises(SystemExit) as se:
         run_parser(parser_type="Garbage", publisher="rabbit://127.0.0.1:5672")  # No 'Garbage' parser
-    assert se.value.code == -2
+    assert se.value.code == ERRNO_UNKNOWN_PARSER_TYPE
 
     with pytest.raises(SystemExit) as se:
         parse(parser_type="pose", path=".XAXA")  # It's not a file
-    assert se.value.code == -3
+    assert se.value.code == ERRNO_FILE_NOT_EXIST
 
     with pytest.raises(SystemExit) as se:
         parse(parser_type='pose', path="./tests/mock_data/mock.snp")  # mock.snp file is not formatted
-    assert se.value.code == -4
+    assert se.value.code == ERRNO_FILE_FORMAT
 
