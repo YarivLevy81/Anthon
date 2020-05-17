@@ -125,6 +125,12 @@ errno | -
     >>> run_saver(database=database, publisher=publisher) # Currently only MongoDB (database), RabbitMQ (publisher) are supported
 .result files are similar to mentioned above. 
 
+errno | -
+------------ | -------------
+-2 | File 'path' doesn't exist
+-3 | File 'path' formatted (see above)
+-4 | provided publisher/database aren't supported
+
 5. **API** - run Anton's RESTFUL-API.
     ```python
     >>> from Anton.api import run_server
