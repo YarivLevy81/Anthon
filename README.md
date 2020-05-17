@@ -22,13 +22,13 @@
 
 ## Interfaces
 
-**1. Client - upload sample to the server (assumes .mind file type)**
+**1. Client** - upload samples to the server (assumes .mind file type)
 
-    ```python
-    >>> from Anton.client import upload_sample
-    >>> upload_sample(host='127.0.0.1', port=8000, path='sample.mind.gzip')
-    ...
-    ```
+```python
+>>> from Anton.client import upload_sample
+>>> upload_sample(host='127.0.0.1', port=8000, path='sample.mind.gzip')
+...
+```
     
 errno | -
 ------------ | -------------
@@ -36,72 +36,70 @@ errno | -
 -3 | File 'path' isn't .gz type
 -4 | Server at 'host':'port' issue
     
-**2. Server - run server that forwards snapshots to other components,
-   publish can also be a function**
+**2. Server** - run server that forwards snapshots to other components,
+   publish can also be a function
    
-    ```python
-    >>> from Anton.server import run_server
-    >>> run_server(host='127.0.0.1', port=8000, publish="rabbitmq://127.0.0.1:5672") # publish to RabbitMQ
-    >>> run_server(host='127.0.0.1', port=8000, publish=print) # print the message
-    ...
-    ```
+```python
+>>> from Anton.server import run_server
+>>> run_server(host='127.0.0.1', port=8000, publish="rabbitmq://127.0.0.1:5672") # publish to RabbitMQ
+>>> run_server(host='127.0.0.1', port=8000, publish=print) # print the message
+...
+```
     
 errno | -
 ------------ | -------------
 -2 | Can't bind server to 'host':'port'
 -3 | provided publisher isn't supported
 
-**3. Parsers - run parser of some type, publishing result if needed **
+**3. Parsers** - run parser of some type, publishing result if needed
+```python
+>>> from Anton.parsers import run_parser
+>>> from Anton.parsers import parse
+>>> ...
+>>> parser_type = 'pose'
+>>> data_path = '/snapshots/2da3a844a5f640ce816cd8464e6d77d8.raw'
+>>> publisher = 'rabbitmq://127.0.0.1:5672'
+>>> ...
+>>> parse(parser_type=parser_type, path=data_path)
+>>> run_praser(parser_type=parser_type, publisher=publisher) # Currently only RabbitMQ publisher is supported
+```
+    
+parser_type is one of ['pose', 'color_image', 'depth_image', 'feelings'], data_path is a path to a file of the following format -     
 
-    ```python
-    >>> from Anton.parsers import run_parser
-    >>> from Anton.parsers import parse
-    >>> ...
-    >>> parser_type = 'pose'
-    >>> data_path = '/snapshots/2da3a844a5f640ce816cd8464e6d77d8.raw'
-    >>> publisher = 'rabbitmq://127.0.0.1:5672'
-    >>> ...
-    >>> parse(parser_type=parser_type, path=data_path)
-    >>> run_praser(parser_type=parser_type, publisher=publisher) # Currently only RabbitMQ publisher is supported
-    ```
-    
-parser_type is one of ['pose', 'color_image', 'depth_image', 'feelings'], data_path is a path to a file of the following format - 
-    
-    ```json
-    {
-        "user_id": 420777666420, 
-        "username": "Yariv Levy", 
-        "birthdate": 123456789, 
-        "gender": 0, 
-        "snapshot_id": "2da3a844a5f640ce816cd8464e6d77d8", 
-        "snapshot_path": "/snapshots/2da3a844a5f640ce816cd8464e6d77d8.snp", 
-        "timestamp": 1575446887339
-    }
-    ```
+```json
+{
+    "user_id": 420777666420, 
+    "username": "Yariv Levy", 
+    "birthdate": 123456789, 
+    "gender": 0, 
+    "snapshot_id": "2da3a844a5f640ce816cd8464e6d77d8", 
+    "snapshot_path": "/snapshots/2da3a844a5f640ce816cd8464e6d77d8.snp", 
+    "timestamp": 1575446887339
+}
+```
     
 result example ('pose') - 
-    
-    ```json
-    {
-        "pose": {
-            "translation_x": 0.4873843491077423, 
-            "translation_y": 0.007090016733855009, 
-            "translation_z": -1.1306129693984985, 
-            "rotation_x": -0.10888676356214629, 
-            "rotation_y": -0.26755994585035286, 
-            "rotation_z": -0.021271118915446748, 
-            "rotation_w": 0.9571326384559261
-        }, 
-        "user_id": 420777666420, 
-        "username": "Yariv Levy", 
-        "birthdate": 123456789, 
-        "gender": 0, 
-        "snapshot_id": "2da3a844a5f640ce816cd8464e6d77d8", 
-        "snapshot_path": "/snapshots/2da3a844a5f640ce816cd8464e6d77d8.snp", 
-        "timestamp": 1575446887339
-    }
 
-    ```
+```json
+{
+"pose": {
+    "translation_x": 0.4873843491077423, 
+    "translation_y": 0.007090016733855009, 
+    "translation_z": -1.1306129693984985, 
+    "rotation_x": -0.10888676356214629, 
+    "rotation_y": -0.26755994585035286, 
+    "rotation_z": -0.021271118915446748, 
+    "rotation_w": 0.9571326384559261
+}, 
+"user_id": 420777666420, 
+"username": "Yariv Levy", 
+"birthdate": 123456789, 
+"gender": 0, 
+"snapshot_id": "2da3a844a5f640ce816cd8464e6d77d8", 
+"snapshot_path": "/snapshots/2da3a844a5f640ce816cd8464e6d77d8.snp", 
+"timestamp": 1575446887339
+}
+```
     
 errno | -
 ------------ | -------------
@@ -132,22 +130,25 @@ errno | -
 -4 | provided publisher/database aren't supported
 
 5. **API** - run Anton's RESTFUL-API.
-    ```python
-    >>> from Anton.api import run_server
-    >>> run_server(host='127.0.0.1', port=5000, database="mongodb://127.0.0.1:27017")
-    ... # Only MongoDB is currently supported
-    ```
+
+```python
+>>> from Anton.api import run_server
+>>> run_server(host='127.0.0.1', port=5000, database="mongodb://127.0.0.1:27017")
+... # Only MongoDB is currently supported
+```
 
 6. **GUI** - run Anton's GUI.
-    ```python
-    >>> from Anton.gui import run_server
-    >>> run_server(
-    ...     host='127.0.0.1',
-    ...     port=8080,
-    ...     api_host='127.0.0.1'.
-    ...     api_port=5000
-    ...)
-    ```
+
+```python
+>>> from Anton.gui import run_server
+>>> run_server(
+...     host='127.0.0.1',
+...     port=8080,
+...     api_host='127.0.0.1'.
+...     api_port=5000
+...)
+```
+
 The GUI assumes a running API server (see section 5) in api_host:api_port.
 
 ## CLI
