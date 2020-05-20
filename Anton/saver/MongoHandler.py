@@ -1,7 +1,6 @@
 import pymongo
 from furl import furl
-from Anton.common import UnsupportedSchemeException
-import Anton.common as Common
+from Anton.common import *
 
 
 BASE_DB = "anthon_db"
@@ -95,15 +94,15 @@ class MongoHandler(DBHandler):
         users_json_list = []
         for user_doc in self.users_col.find():
             user_json = dict()
-            user_json[Common.USER_ID_FIELD]  = user_doc[Common.USER_ID_FIELD]
-            user_json[Common.USERNAME_FIELD] = user_doc[Common.USERNAME_FIELD]
+            user_json[USER_ID_FIELD]  = user_doc[USER_ID_FIELD]
+            user_json[USERNAME_FIELD] = user_doc[USERNAME_FIELD]
 
             users_json_list.append(user_json)
 
         return users_json_list
 
     def get_user(self, user_id):
-        user_doc = self.users_col.find_one({Common.USER_ID_FIELD: user_id})
+        user_doc = self.users_col.find_one({USER_ID_FIELD: user_id})
         if user_doc is not None:
             user_doc.pop('_id')
 
@@ -112,21 +111,21 @@ class MongoHandler(DBHandler):
     def get_user_snapshots(self, user_id):
         snapshots_json_list = []
 
-        for snapshot_doc in self.snapshots_col.find({Common.USER_ID_FIELD: user_id}):
+        for snapshot_doc in self.snapshots_col.find({USER_ID_FIELD: user_id}):
             snapshot_json = dict()
-            snapshot_json[Common.SNAPSHOT_ID_FIELD] = snapshot_doc[Common.SNAPSHOT_ID_FIELD]
-            snapshot_json[Common.TIMESTAMP_FIELD]   = snapshot_doc[Common.TIMESTAMP_FIELD]
+            snapshot_json[SNAPSHOT_ID_FIELD] = snapshot_doc[SNAPSHOT_ID_FIELD]
+            snapshot_json[TIMESTAMP_FIELD]   = snapshot_doc[TIMESTAMP_FIELD]
 
             snapshots_json_list.append(snapshot_json)
 
         return snapshots_json_list
 
     def get_snapshot(self, user_id, snapshot_id):
-        snapshot_doc = self.snapshots_col.find_one({Common.SNAPSHOT_ID_FIELD: snapshot_id, Common.USER_ID_FIELD: user_id})
+        snapshot_doc = self.snapshots_col.find_one({SNAPSHOT_ID_FIELD: snapshot_id, USER_ID_FIELD: user_id})
         if snapshot_doc is not None:
             snapshot_doc.pop('_id')
-            snapshot_doc.pop(Common.SNAPSHOT_PATH_FIELD)
-            snapshot_doc.pop(Common.USER_ID_FIELD)
+            snapshot_doc.pop(SNAPSHOT_PATH_FIELD)
+            snapshot_doc.pop(USER_ID_FIELD)
 
         return snapshot_doc
 

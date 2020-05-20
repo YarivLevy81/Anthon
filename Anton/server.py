@@ -3,10 +3,9 @@ from flask import Flask, jsonify, request
 from Anton.anthon_pb2 import ServerMessage, User
 from uuid import uuid4
 from pathlib import Path
-from Anton.mq_handler import MQHandler, UnsupportedSchemeException
+from Anton.mq_handler import MQHandler
 import json
-import Anton.common as Common
-from Anton.common import bcolors
+from Anton.common import *
 
 
 ERRNO_PERMISSION_DENIED = -2
@@ -55,13 +54,13 @@ def new_user():
     gender    = user.gender
 
     data = {
-        Common.USER_ID_FIELD:   user_id,
-        Common.USERNAME_FIELD:  username,
-        Common.BIRTHDATE_FIELD: birthdate,
-        Common.GENDER_FIELD:    gender,
+        USER_ID_FIELD:   user_id,
+        USERNAME_FIELD:  username,
+        BIRTHDATE_FIELD: birthdate,
+        GENDER_FIELD:    gender,
     }
 
-    user_message = {Common.TYPE_FIELD: Common.USER_TYPE, Common.DATA_FIELD: data}
+    user_message = {TYPE_FIELD: USER_TYPE, DATA_FIELD: data}
     publish_user(json.dumps(user_message))
 
 
@@ -84,13 +83,13 @@ def new_message():
     snapshot_path = save_snapshot_to_disk(snapshot_data, snapshot_id)
 
     message_dict = {
-        Common.USER_ID_FIELD:       user_id,
-        Common.USERNAME_FIELD:      username,
-        Common.BIRTHDATE_FIELD:     birthdate,
-        Common.GENDER_FIELD:        gender,
-        Common.SNAPSHOT_ID_FIELD:   snapshot_id,
-        Common.SNAPSHOT_PATH_FIELD: snapshot_path,
-        Common.TIMESTAMP_FIELD:     timestamp,
+        USER_ID_FIELD:       user_id,
+        USERNAME_FIELD:      username,
+        BIRTHDATE_FIELD:     birthdate,
+        GENDER_FIELD:        gender,
+        SNAPSHOT_ID_FIELD:   snapshot_id,
+        SNAPSHOT_PATH_FIELD: snapshot_path,
+        TIMESTAMP_FIELD:     timestamp,
     }
     _save_message_to_disk(message_dict)
 

@@ -5,8 +5,8 @@ from Anton.parsers.ColorImageParser import ColorImageParser
 from Anton.parsers.DepthImageParser import DepthImageParser
 import json
 import signal
-import Anton.mq_handler as MQHandler
-import Anton.common as Common
+from Anton.mq_handler import *
+from Anton.common import *
 import pathlib
 from Anton.common import bcolors
 
@@ -31,9 +31,9 @@ def parse(parser_type, path):
         data = file.read()
         json_data = json.loads(data)
 
-        snapshot_path = json_data[Common.SNAPSHOT_PATH_FIELD]
-        user_id       = json_data[Common.USER_ID_FIELD]
-        snapshot_id   = json_data[Common.SNAPSHOT_ID_FIELD]
+        snapshot_path = json_data[SNAPSHOT_PATH_FIELD]
+        user_id       = json_data[USER_ID_FIELD]
+        snapshot_id   = json_data[SNAPSHOT_ID_FIELD]
 
         session = Session(user_id=user_id, snapshot_id=snapshot_id)
         result = parser.parse(snapshot_path, session)
@@ -56,13 +56,13 @@ def run_parser(parser_type, publisher):
 
     def callback(ch, method, properties, body):
         message = json.loads(body)
-        user_id = message[Common.USER_ID_FIELD]
-        snapshot_id = message[Common.SNAPSHOT_ID_FIELD]
-        snapshot_path = message[Common.SNAPSHOT_PATH_FIELD]
+        user_id = message[USER_ID_FIELD]
+        snapshot_id = message[SNAPSHOT_ID_FIELD]
+        snapshot_path = message[SNAPSHOT_PATH_FIELD]
 
         saver_message = parser.parse(snapshot_path, Session(user_id=user_id, snapshot_id=snapshot_id))
         saver_message.update(message)
-        saver_message[Common.TYPE_FIELD] = parser_type
+        saver_message[TYPE_FIELD] = parser_type
         saver_message = json.dumps(saver_message)
 
         mq_handler.to_saver(message=saver_message)
@@ -73,12 +73,12 @@ def run_parser(parser_type, publisher):
         exit(0)
 
     try:
-        mq_handler = MQHandler.MQHandler(publisher)
-        mq_handler.init_parser_queue(queue_name=parser_type, exchange_type=MQHandler.PARSERS_EXCHANGE_TYPE)
+        mq_handler = MQHandler(publisher)
+        mq_handler.init_parser_queue(queue_name=parser_type, exchange_type=PARSERS_EXCHANGE_TYPE)
         # This line will block until SIGINT\SIGTERM\SIGKILL is received
         mq_handler.listen_to_queue(queue_name=parser_type, callback=callback)
         signal.signal(signal.SIGINT, signal_handler)
-    except Common.UnsupportedSchemeException as e:
+    except UnsupportedSchemeException as e:
         print(f'{bcolors.FAIL}ERROR: Publisher {e.scheme} is not supported{bcolors.ENDC}')
         exit(ERRNO_UNSUPPORTED_SCHEME)
 

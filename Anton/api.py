@@ -2,8 +2,7 @@ from flask import Flask, send_file
 import click
 from Anton.saver.MongoHandler import MongoHandler
 import json
-import Anton.common as Common
-from Anton.common import bcolors
+from Anton.common import *
 
 app = Flask(__name__)
 _database = None
@@ -103,8 +102,8 @@ def get_user_snapshot_result(user_id, snapshot_id, result_name):
 @app.route("/users/<int:user_id>/snapshots/<snapshot_id>/<result_name>/data", methods=['GET'])
 def get_user_snapshot_result_data(user_id, snapshot_id, result_name):
     result_json = base_user_snapshot_result(user_id=user_id, snapshot_id=snapshot_id, result_name=result_name)
-    if Common.IMAGE_PATH_FIELD in result_json:
-        image_path = result_json[Common.IMAGE_PATH_FIELD]
+    if IMAGE_PATH_FIELD in result_json:
+        image_path = result_json[IMAGE_PATH_FIELD]
         return send_file(image_path, mimetype='image/png')
 
     else:
