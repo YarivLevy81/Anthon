@@ -25,6 +25,8 @@ def main_users():
         main_url = f'{API_URL}/users'
         r = requests.get(main_url)
         results = r.json()
+        if not results:
+            return page_not_found("No users available")
 
         for result in results:
             user_data = {
@@ -46,6 +48,8 @@ def user_page(user_id):
     user_url = f'{API_URL}/users/{user_id}'
     r = requests.get(user_url)
     user_result = r.json()
+    if not user_result:
+        return page_not_found(f'User {user_id} not found')
 
     birthdate = user_result['birthdate']
     birthdate = datetime.utcfromtimestamp(int(birthdate)).strftime('%Y-%m-%d %H:%M:%S')
@@ -84,6 +88,8 @@ def snapshot_page(user_id, snapshot_id):
     snapshot_url = f'{API_URL}/users/{user_id}/snapshots/{snapshot_id}'
     r = requests.get(snapshot_url)
     result = r.json()
+    if not result:
+        return page_not_found(f'Snapshot {snapshot_id} for user {user_id} not found')
 
     user = {
         'user_id': user_id
@@ -130,6 +136,11 @@ def snapshot_page(user_id, snapshot_id):
                            depth_image=depth_image, color_image=color_image, urls=urls,
                            user=user, snapshot=snapshot, pose_data=pose_data_formatted,
                            feelings_data=feelings_data_formatted)
+
+
+@app.errorhandler(404)
+def page_not_found(e="page is unavailable"):
+    return render_template('404.html', error=e), 404
 
 
 def just_before():

@@ -41,7 +41,7 @@ class MongoHandler(DBHandler):
             self.snapshots_col.insert_one(result_entry.to_json())
             return
 
-        self.snapshots_col.update({'snapshot_id': result_entry.snapshot_id}, {'$set' : result_entry.result_to_json()})
+        self.snapshots_col.update({'snapshot_id': result_entry.snapshot_id}, {'$set': result_entry.result_to_json()})
 
     def snapshot_id_exists(self, snapshot_id):
         return True if self.snapshots_col.find_one({'snapshot_id': snapshot_id}) else False
