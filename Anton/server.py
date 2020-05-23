@@ -132,7 +132,6 @@ def publish_user(message):
 
 
 def save_snapshot_to_disk(snapshot_data, snapshot_id):
-    # TODO: make sure that directory exists
     file = Path(SNAPSHOTS_DIRECTORY) / (snapshot_id  + ".snp")
     file.write_bytes(snapshot_data.SerializeToString())
 
