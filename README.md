@@ -7,14 +7,14 @@
 
 1. Clone the repository:
 
-    ```js
+    ```console
     $ git clone https://github.com/YarivLevy81/Anton.git
     $ cd Anton/
     ```
 
 2. Run installation, acitvate environment:
 
-    ```js
+    ```console
     $ ./scripts/install.sh
     $ source .env/bin/activate
     [Anton] $
@@ -255,9 +255,30 @@ The following are supported -
 
     {"translation_x": 0.4873843491077423, "translation_y": 0.007090016733855009, "translation_z": -1.1306129693984985, "rotation_x": -0.10888676356214629, "rotation_y": -0.26755994585035286, "rotation_z": -0.021271118915446748, "rotation_w": 0.9571326384559261}
 
+## Web App
+
+Default host:path => **0.0.0.0:8080**
+
+- [Main page](http://0.0.0.0:8080/) - shows all users in the system
+- [User page](http://0.0.0.0:8080/users/42) - shows description of user with links to snapshots
+- [Snapshot page](http://0.0.0.0:8080/users/42/snapshots/covfefedeadbeef123) - shows data of snapshot
+
+## Pipeline and Docker
+
+Run pipeline with docker-compose
+```console
+[Anton] $ docker-compose -f ./docker/docker-compose.yaml up --build
+... --build is optional
+```
+
+Run pipeline with .sh script ('encapsulated' docker-compose)
+```console
+[Anton] $ ./scripts/run.sh
+```
+
 ## Testing
 
 You can run all unittests with the following command:
-```sh
-$ pytest tests/
+```console
+$ pytest ./tests/
 ```
