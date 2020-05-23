@@ -257,11 +257,24 @@ The following are supported -
 
 ## Web App
 
-default host:path => **0.0.0.0:8080**
+Default host:path => **0.0.0.0:8080**
 
 - [Main page](http://0.0.0.0:8080/) - shows all users in the system
 - [User page](http://0.0.0.0:8080/users/42) - shows description of user with links to snapshots
 - [Snapshot page](http://0.0.0.0:8080/users/42/snapshots/covfefedeadbeef123) - shows data of snapshot
+
+## Pipeline and Docker
+
+Run pipeline with docker-compose
+```console
+$ [Anton] docker-compose -f ./docker/docker-compose.yaml up --build
+... --build is optional
+```
+
+Run pipeline with .sh script ('encapsulated' docker-compose)
+```console
+$ [Anton] ./scripts/run.sh
+```
 
 ## Testing
 
