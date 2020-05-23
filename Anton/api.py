@@ -28,7 +28,7 @@ def run_api_server(host, port, database):
     global _database
     _database = MongoHandler(database)
     try:
-        app.run(host=host, port=port, debug=True)
+        app.run(host=host, port=port)
     except PermissionError:
         print(f'{bcolors.FAIL}ERROR: Can\'t bind server to {host}:{port}{bcolors.ENDC}')
         exit(ERRNO_PERMISSION_DENIED)

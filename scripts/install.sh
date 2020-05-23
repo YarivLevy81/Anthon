@@ -6,10 +6,10 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
 
 function main {
-    python -m virtualenv .env --prompt "[Anton] "
-    find .env -name site-packages -exec bash -c 'echo "../../../../" > {}/self.pth' \;
-    .env/bin/pip install -U pip
-    .env/bin/pip install -r requirements.txt
+    python3 -m virtualenv .AntonEnv
+    find .AntonEnv -name site-packages -exec bash -c 'echo "../../../../" > {}/self.pth' \;
+    .AntonEnv/bin/pip install -U pip
+    .AntonEnv/bin/pip install -r requirements.txt
 }
 
 

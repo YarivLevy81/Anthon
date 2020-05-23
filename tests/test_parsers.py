@@ -1,5 +1,6 @@
 import pytest
 from Anton.parsers import *
+import shutil
 
 
 def test_pose_parser():
@@ -33,6 +34,7 @@ def test_color_image_parser():
     from pathlib import Path
     expected_path = str(Path().cwd().absolute()) + "/users_data/42/mock/color_image.png"
     assert result['image_path'] == expected_path, err_msg.format('image_path')
+    shutil.rmtree("./users_data")
 
 
 def test_depth_image_parser():
@@ -49,6 +51,7 @@ def test_depth_image_parser():
     from pathlib import Path
     expected_path = str(Path().cwd().absolute()) + "/users_data/42/mock/depth_image.png"
     assert result['image_path'] == expected_path, err_msg.format('image_path')
+    shutil.rmtree("./users_data")
 
 
 def test_feelings_parser():

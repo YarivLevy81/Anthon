@@ -9,3 +9,4 @@ Anton/gui/flask/
 snapshots/
 users_data/
 data/
+.AntonEnv/
