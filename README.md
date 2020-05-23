@@ -7,14 +7,14 @@
 
 1. Clone the repository:
 
-    ```js
+    ```console
     $ git clone https://github.com/YarivLevy81/Anton.git
     $ cd Anton/
     ```
 
 2. Run installation, acitvate environment:
 
-    ```js
+    ```console
     $ ./scripts/install.sh
     $ source .env/bin/activate
     [Anton] $
@@ -258,6 +258,6 @@ The following are supported -
 ## Testing
 
 You can run all unittests with the following command:
-```sh
+```console
 $ pytest tests/
 ```
