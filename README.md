@@ -17,7 +17,7 @@
     ```console
     $ ./scripts/install.sh
     $ source .env/bin/activate
-    [Anton] $
+    .AntonEnv >
     ```
 
 ## Interfaces
@@ -267,18 +267,23 @@ Default host:path => **0.0.0.0:8080**
 
 Run pipeline with docker-compose
 ```console
-[Anton] $ docker-compose -f ./docker/docker-compose.yaml up --build
+.AntonEnv > docker-compose -f ./docker/docker-compose.yaml up --build
 ... --build is optional
 ```
 
 Run pipeline with .sh script ('encapsulated' docker-compose)
 ```console
-[Anton] $ ./scripts/run.sh
+.AntonEnv > ./scripts/run.sh
+```
+
+You can run this to reset all Anton's databases and files (this assumes currently running environment with docker-compose)
+```console
+.AntonEnv > ./scripts/reset.sh
 ```
 
 ## Testing
 
 You can run all unittests with the following command:
 ```console
-$ pytest ./tests/
+.AntonEnv > pytest ./tests/
 ```
