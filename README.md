@@ -267,13 +267,13 @@ Default host:path => **0.0.0.0:8080**
 
 Run pipeline with docker-compose
 ```console
-$ [Anton] docker-compose -f ./docker/docker-compose.yaml up --build
+[Anton] $ docker-compose -f ./docker/docker-compose.yaml up --build
 ... --build is optional
 ```
 
 Run pipeline with .sh script ('encapsulated' docker-compose)
 ```console
-$ [Anton] ./scripts/run.sh
+[Anton] $ ./scripts/run.sh
 ```
 
 ## Testing
