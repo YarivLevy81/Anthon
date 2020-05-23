@@ -5,7 +5,6 @@ USERS_DATA_DIRECTORY = "./users_data"
 
 
 class Session:
-
     def __init__(self, user_id, snapshot_id):
         self.user_id = user_id
         self.snapshot_id = snapshot_id

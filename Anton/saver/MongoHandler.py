@@ -4,9 +4,9 @@ from Anton.common import *
 from Anton.saver.DBHandler import *
 
 
-BASE_DB = "anthon_db"
-USERS_COL = "users"
-SNAPSHOTS_COL = "snapshots"
+BASE_DB = "anton_db"
+USERS_COL = "anton_users"
+SNAPSHOTS_COL = "anton_snapshots"
 MONGO_DEFAULT_PATH = "mongodb://localhost:27017"
 
 

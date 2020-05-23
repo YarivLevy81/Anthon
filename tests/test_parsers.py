@@ -71,7 +71,7 @@ def test_error_handle():
     assert se.value.code == ERRNO_UNKNOWN_PARSER_TYPE
 
     with pytest.raises(SystemExit) as se:
-        run_parser(parser_type="Garbage", publisher="rabbit://127.0.0.1:5672")  # No 'Garbage' parser
+        run_parser(parser_type="Garbage", publisher="rabbitmq://127.0.0.1:5672")  # No 'Garbage' parser
     assert se.value.code == ERRNO_UNKNOWN_PARSER_TYPE
 
     with pytest.raises(SystemExit) as se:

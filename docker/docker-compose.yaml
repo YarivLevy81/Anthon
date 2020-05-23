@@ -26,7 +26,7 @@ services:
     networks:
       - my_network
     volumes:
-      - ./data:/data
+      - ./users_data:/users_data
       - ./snapshots:/snapshots
   pose:
     build:
@@ -95,12 +95,13 @@ services:
     networks:
       - my_network
     volumes:
-      - ./data:/data
+      - ./users_data:/users_data
+      - ./snapshots:/snapshots
   api:
     build:
       context: ..
       dockerfile: ./docker/Dockerfile
-    command: ./wait-for-it.sh rabbitmq:5672 -- python -m Anton.api run-server -h '0.0.0.0' -p 5000 -d 'mongodb://mongodb:27017'
+    command: ./wait-for-it.sh rabbitmq:5672 -- python -u -m Anton.api run-server -h '0.0.0.0' -p 5000 -d 'mongodb://mongodb:27017'
     ports:
       - "5000:5000"
     networks:
@@ -108,7 +109,6 @@ services:
     links:
       - "mongodb"
     volumes:
-      - ./data:/data
       - ./users_data:/users_data
       - ./snapshots:/snapshots
   gui:
@@ -123,7 +123,6 @@ services:
     links:
       - "rabbitmq"
     volumes:
-      - ./data:/data
       - ./users_data:/users_data
       - ./snapshots:/snapshots
 networks:
