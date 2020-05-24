@@ -275,12 +275,12 @@ Run pipeline with docker-compose
 ```
 
 Run pipeline with .sh script ('encapsulated' docker-compose)
-```console
+```bash
 (.AntonEnv) $ ./scripts/run.sh
 ```
 
 You can run this to reset all Anton's databases and files (this assumes currently running environment with docker-compose)
-```console
+```bash
 (.AntonEnv) $ ./scripts/reset.sh
 ```
 
@@ -288,7 +288,7 @@ You can run this to reset all Anton's databases and files (this assumes currentl
 
 You can run an end-to-end integration test of system, with API tests with the following command:
 
-```console
+```bash
 (.AntonEnv) $ python3 -m tests.integration_test
 ```
 **Note:** docker and docker-compose should be available and executable from user (not sudo)
@@ -297,6 +297,6 @@ You can run an end-to-end integration test of system, with API tests with the fo
 ## Unit testing
 
 You can run all unittests with the following command:
-```console
+```bash
 (.AntonEnv)~$ pytest tests/
 ```
