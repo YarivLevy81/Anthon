@@ -50,6 +50,7 @@ def upload_sample(host, port, path):
         except requests.exceptions.RequestException as e:
             print(f'{bcolors.FAIL}ERROR: Connectivity problem with {host}:{port}\nStackTrace -\n{e}{bcolors.ENDC}')
             exit(ERRNO_SERVER_UNAVAILABLE)
+    return 0
 
 
 def populate_message(msg, reader, snapshot):
