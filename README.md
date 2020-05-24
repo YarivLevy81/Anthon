@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/YarivLevy81/Anthon.svg?branch=master)](https://travis-ci.org/github/YarivLevy81/Anthon)
-[![codecov](https://codecov.io/gh/YarivLevy81/Anthon/branch/master/graph/badge.svg)](https://codecov.io/gh/YarivLevy81/Anthon)
+[![Build Status](https://travis-ci.org/YarivLevy81/Anton.svg?branch=master)](https://travis-ci.org/github/YarivLevy81/Anton)
+[![codecov](https://codecov.io/gh/YarivLevy81/Anton/branch/master/graph/badge.svg)](https://codecov.io/gh/YarivLevy81/Anton)
 
 # Final Project at Advanced System Design course, TAU
 
@@ -281,9 +281,18 @@ You can run this to reset all Anton's databases and files (this assumes currentl
 .AntonEnv > ./scripts/reset.sh
 ```
 
-## Testing
+## Integration testing
+
+You can run an end-to-end integration test of system, with API tests with the following command:
+
+```console
+.AntonEnv > python3 -m tests.integration_test
+```
+
+
+## Unit testing
 
 You can run all unittests with the following command:
 ```console
-.AntonEnv > pytest ./tests/
+.AntonEnv > pytest tests/
 ```
