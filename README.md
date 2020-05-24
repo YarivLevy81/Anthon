@@ -278,7 +278,7 @@ Default host:path => **0.0.0.0:8080**
 ## Pipeline and Docker
 
 * Run pipeline with docker-compose
-```console
+```bash
 (.AntonEnv) $ docker-compose -f ./docker/docker-compose.yaml up --build
 ... --build is optional
 ```
