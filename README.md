@@ -198,8 +198,9 @@ Default API host:port is '127.0.0.1':5000.
 
 The following are supported - 
 
-**`GET /users`**
+* **`GET /users`**
 
+    ```bash
     $ curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users
 
     HTTP/1.0 200 OK
@@ -209,9 +210,11 @@ The following are supported -
     Date: Wed, 13 May 2020 14:57:09 GMT
 
     [{"user_id": 420666777420, "username": "Yariv Levy"}]
+    ```
+    
+* **`GET /users/<user_id>`**
 
-**`GET /users/<user_id>`**
-
+    ```bash
     $ curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420
 
     HTTP/1.0 200 OK
@@ -221,9 +224,11 @@ The following are supported -
     Date: Wed, 13 May 2020 14:57:09 GMT
 
     {"user_id": 420666777420, "username": "Yariv Levy", "birthdate": 12345678, "gender": 0}
+    ```
+    
+* **`GET /users/<user_id>/snapshots`**
 
-**`GET /users/<user_id>/snapshots`**
-
+    ```bash
     $ curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420/snapshots
 
     HTTP/1.0 200 OK
@@ -233,9 +238,10 @@ The following are supported -
     Date: Wed, 13 May 2020 14:57:09 GMT
 
     [{"snapshot_id": "6162e82630e1454d92f65b105ad75042", "timestamp": 1575446887339}, {"snapshot_id": "b7d510d93ce74b6e94a06a3e84c9926c", "timestamp": 1575446887412}, {"snapshot_id": "abd32178bd8343db869ab1386319bb8e", "timestamp": 1575446887476}]
-    
-**`GET /users/<user_id>/snapshots/<user_id>`**
+    ```
+* **`GET /users/<user_id>/snapshots/<user_id>`**
 
+    ```bash
     $ curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420/snapshots/6162e82630e1454d92f65b105ad75042
 
     HTTP/1.0 200 OK
@@ -245,9 +251,11 @@ The following are supported -
     Date: Wed, 13 May 2020 14:57:09 GMT
 
     {"snapshot_id": "6162e82630e1454d92f65b105ad75042", "timestamp": 1575446887339, "pose": {"translation_x": 0.4873843491077423, "translation_y": 0.007090016733855009, "translation_z": -1.1306129693984985, "rotation_x": -0.10888676356214629, "rotation_y": -0.26755994585035286, "rotation_z": -0.021271118915446748, "rotation_w": 0.9571326384559261}, "feelings": {"hunger": 0.0, "thirst": 0.0, "exhaustion": 0.0, "happiness": 0.0}, "depth_image": {"height": 1080, "width": 1920, "image_path": "/users_data/42/6162e82630e1454d92f65b105ad75042/depth_image.png"}, "color_image": {"height": 1080, "width": 1920, "image_path": "/users_data/42/6162e82630e1454d92f65b105ad75042/color_image.png"}}
+    ```
+    
+* **`GET /users/<user_id>/snapshots/<user_id>/<result_id>`**
 
-**`GET /users/<user_id>/snapshots/<user_id>/<result_id>`**
-
+    ```bash
     $ curl -i -H 'Accept: application/json' http://127.0.0.1:5000/users/420666777420/snapshots/6162e82630e1454d92f65b105ad75042/pose
     
     HTTP/1.0 200 OK
@@ -257,36 +265,37 @@ The following are supported -
     Date: Wed, 13 May 2020 14:57:09 GMT
 
     {"translation_x": 0.4873843491077423, "translation_y": 0.007090016733855009, "translation_z": -1.1306129693984985, "rotation_x": -0.10888676356214629, "rotation_y": -0.26755994585035286, "rotation_z": -0.021271118915446748, "rotation_w": 0.9571326384559261}
-
+    ```
+    
 ## Web App
 
 Default host:path => **0.0.0.0:8080**
 
-- [Main page](http://0.0.0.0:8080/) - shows all users in the system
-- [User page](http://0.0.0.0:8080/users/42) - shows description of user with links to snapshots
-- [Snapshot page](http://0.0.0.0:8080/users/42/snapshots/covfefedeadbeef123) - shows data of snapshot
+- [Main page](http://0.0.0.0:8080/) - shows all users in the system (http://0.0.0.0:8080/)
+- [User page](http://0.0.0.0:8080/users/42) - shows description of user with links to snapshots (http://0.0.0.0:8080/users/user_id)
+- [Snapshot page](http://0.0.0.0:8080/users/42/snapshots/covfefedeadbeef123) - shows data of snapshot (http://0.0.0.0:8080/users/user_id/snapshots/snapshot_i)
 
 ## Pipeline and Docker
 
-Run pipeline with docker-compose
+* Run pipeline with docker-compose
 ```console
 (.AntonEnv) $ docker-compose -f ./docker/docker-compose.yaml up --build
 ... --build is optional
 ```
 
-Run pipeline with .sh script ('encapsulated' docker-compose)
+* Run pipeline with .sh script ('encapsulated' docker-compose):
 ```bash
 (.AntonEnv) $ ./scripts/run.sh
 ```
 
-You can run this to reset all Anton's databases and files (this assumes currently running environment with docker-compose)
+* Run this to reset all Anton's databases and files (this assumes currently running environment with docker-compose):
 ```bash
 (.AntonEnv) $ ./scripts/reset.sh
 ```
 
 ## Integration testing
 
-You can run an end-to-end integration test of system, with API tests with the following command:
+Run an end-to-end integration test of system, with REST-API tests with the following command:
 
 ```bash
 (.AntonEnv) $ python3 -m tests.integration_test
@@ -296,7 +305,7 @@ You can run an end-to-end integration test of system, with API tests with the fo
 
 ## Unit testing
 
-You can run all unittests with the following command:
+Run all unittests with the following command:
 ```bash
 (.AntonEnv)~$ pytest tests/
 ```
