@@ -297,6 +297,6 @@ You can run an end-to-end integration test of system, with API tests with the fo
 ## Unit testing
 
 You can run all unittests with the following command:
-```console
+```zsh
 (.AntonEnv) $ pytest tests/
 ```
