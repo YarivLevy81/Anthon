@@ -127,4 +127,3 @@ def base_user_snapshot_result(user_id, snapshot_id, result_name):
 
 if __name__ == '__main__':
     main()
-
