@@ -20,7 +20,7 @@ Make sure you have installed all of the following prerequisites on your machine:
     ```console
     $ ./scripts/install.sh
     $ source .env/bin/activate
-    .AntonEnv >
+    (.AntonEnv) $
     ```
 
 ## Interfaces
@@ -270,18 +270,18 @@ Default host:path => **0.0.0.0:8080**
 
 Run pipeline with docker-compose
 ```console
-.AntonEnv > docker-compose -f ./docker/docker-compose.yaml up --build
+(.AntonEnv) $ docker-compose -f ./docker/docker-compose.yaml up --build
 ... --build is optional
 ```
 
 Run pipeline with .sh script ('encapsulated' docker-compose)
 ```console
-.AntonEnv > ./scripts/run.sh
+(.AntonEnv) $ ./scripts/run.sh
 ```
 
 You can run this to reset all Anton's databases and files (this assumes currently running environment with docker-compose)
 ```console
-.AntonEnv > ./scripts/reset.sh
+(.AntonEnv) $ ./scripts/reset.sh
 ```
 
 ## Integration testing
@@ -289,7 +289,7 @@ You can run this to reset all Anton's databases and files (this assumes currentl
 You can run an end-to-end integration test of system, with API tests with the following command:
 
 ```console
-.AntonEnv > python3 -m tests.integration_test
+(.AntonEnv) $ python3 -m tests.integration_test
 ```
 **Note:** docker and docker-compose should be available and executable from user (not sudo)
 
@@ -297,6 +297,6 @@ You can run an end-to-end integration test of system, with API tests with the fo
 ## Unit testing
 
 You can run all unittests with the following command:
-```properties
-.AntonEnv > pytest tests/
+```console
+(.AntonEnv) $ pytest tests/
 ```
