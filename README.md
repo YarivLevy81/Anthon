@@ -4,7 +4,7 @@
 # Final Project at Advanced System Design course, TAU
 
 Make sure you have installed all of the following prerequisites on your machine:
-* docker, docker-compose 
+* **docker, docker-compose** 
 
 ## Installation
 
@@ -20,7 +20,7 @@ Make sure you have installed all of the following prerequisites on your machine:
     ```console
     $ ./scripts/install.sh
     $ source .env/bin/activate
-    .AntonEnv >
+    (.AntonEnv) $
     ```
 
 ## Interfaces
@@ -270,33 +270,33 @@ Default host:path => **0.0.0.0:8080**
 
 Run pipeline with docker-compose
 ```console
-.AntonEnv > docker-compose -f ./docker/docker-compose.yaml up --build
+(.AntonEnv) $ docker-compose -f ./docker/docker-compose.yaml up --build
 ... --build is optional
 ```
 
 Run pipeline with .sh script ('encapsulated' docker-compose)
-```console
-.AntonEnv > ./scripts/run.sh
+```bash
+(.AntonEnv) $ ./scripts/run.sh
 ```
 
 You can run this to reset all Anton's databases and files (this assumes currently running environment with docker-compose)
-```console
-.AntonEnv > ./scripts/reset.sh
+```bash
+(.AntonEnv) $ ./scripts/reset.sh
 ```
 
 ## Integration testing
 
 You can run an end-to-end integration test of system, with API tests with the following command:
 
-```console
-.AntonEnv > python3 -m tests.integration_test
+```bash
+(.AntonEnv) $ python3 -m tests.integration_test
 ```
-Note: docker and docker-compose should be available and executable from user (not sudo)
+**Note:** docker and docker-compose should be available and executable from user (not sudo)
 
 
 ## Unit testing
 
 You can run all unittests with the following command:
-```console
-.AntonEnv > pytest tests/
+```bash
+(.AntonEnv)~$ pytest tests/
 ```
