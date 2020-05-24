@@ -3,6 +3,9 @@
 
 # Final Project at Advanced System Design course, TAU
 
+Make sure you have installed all of the following prerequisites on your machine:
+* docker, docker-compose 
+
 ## Installation
 
 1. Clone the repository:
@@ -288,6 +291,7 @@ You can run an end-to-end integration test of system, with API tests with the fo
 ```console
 .AntonEnv > python3 -m tests.integration_test
 ```
+Note: docker and docker-compose should be available and executable from user (not sudo)
 
 
 ## Unit testing

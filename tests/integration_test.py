@@ -9,13 +9,13 @@ def main():
     try:
         # Environment up
         print(f'\n{bcolors.OKBLUE}Integration-Test: Setting up environment with docker-compose (this takes around a minute)..{bcolors.ENDC}\n')
-        ret = os.system("docker-compose -f ./docker/docker-compose.yaml -p integ_test up -d")
+        ret = os.system("docker-compose -f ./docker/docker-compose.yaml -p integ_test up --build -d")
         if ret != 0:
             raise Exception("docker-compose up failed")
 
         # Environment set
         print(f'\n{bcolors.OKBLUE}Integration-Test: Waiting for environment to be ready..{bcolors.ENDC}\n')
-        time.sleep(15)  # Need to wait for RabbitMQ to set
+        time.sleep(20)  # Need to wait for RabbitMQ to set
 
         # Client upload samples
         print(f'\n{bcolors.OKBLUE}Integration-Test: Simulating client uploads..{bcolors.ENDC}\n')
