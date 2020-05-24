@@ -7,7 +7,7 @@ furl
 matplotlib
 numpy
 Click==7.0
-codecov==2.0.15
+codecov
 coverage==4.5.4
 docutils==0.15.2
 Flask==1.1.1
