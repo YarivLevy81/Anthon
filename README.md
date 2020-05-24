@@ -281,9 +281,18 @@ You can run this to reset all Anton's databases and files (this assumes currentl
 .AntonEnv > ./scripts/reset.sh
 ```
 
-## Testing
+## Integration testing
+
+You can run an end-to-end integration test of system, with API tests with the following command:
+
+```console
+.AntonEnv > python3 -m tests.integration_test
+```
+
+
+## Unit testing
 
 You can run all unittests with the following command:
 ```console
-.AntonEnv > pytest ./tests/
+.AntonEnv > pytest tests/
 ```
